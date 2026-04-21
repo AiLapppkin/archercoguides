@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { loadCatalog, loadGuideContent } from '../catalog';
 import { getUser, openExternal } from '../telegram';
-import { injectZeroWidth, buildWatermarkDataUrl } from '../utils/watermark';
+import { buildWatermarkDataUrl } from '../utils/watermark';
 import type { Guide as GuideT } from '../types';
 
 function sanitizeContent(html: string): string {
@@ -30,8 +30,7 @@ export function Guide() {
         return loadGuideContent(slug);
       })
       .then((html) => {
-        const user = getUser();
-        setContent(injectZeroWidth(sanitizeContent(html), user?.id));
+        setContent(sanitizeContent(html));
       })
       .catch((e) => setError(String(e)));
   }, [slug]);

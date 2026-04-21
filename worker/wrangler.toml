@@ -1,0 +1,32 @@
+name = "archercoguides-api"
+main = "src/index.ts"
+compatibility_date = "2026-04-21"
+compatibility_flags = ["nodejs_compat"]
+
+# URL from which the Worker fetches free-guide HTMLs.
+# Override per-env via [vars] block below.
+[vars]
+GUIDES_ORIGIN = "https://ailapppkin.github.io/archercoguides"
+ALLOWED_ORIGIN = "https://ailapppkin.github.io"
+# INITDATA_TTL_SECONDS: how old initData is allowed to be. Telegram recommends 24h;
+# we use 1h for tighter replay protection on content endpoints.
+INITDATA_TTL_SECONDS = "3600"
+# Rate limit per user for /api/guides/:slug/content
+RATE_LIMIT_PER_MINUTE = "10"
+
+# D1 binding — database_id filled in after `wrangler d1 create archercoguides-db`
+[[d1_databases]]
+binding = "DB"
+database_name = "archercoguides-db"
+database_id = "REPLACE_WITH_D1_ID"
+
+# KV binding for rate limiting — id filled in after `wrangler kv namespace create RATE_LIMIT`
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "REPLACE_WITH_KV_ID"
+
+# Secrets (set with `wrangler secret put`):
+#   BOT_TOKEN — Telegram bot token from @BotFather (required)
+
+[observability]
+enabled = true

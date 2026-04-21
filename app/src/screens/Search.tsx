@@ -31,31 +31,41 @@ export function Search() {
   });
 
   return (
-    <div className="p-4 space-y-3 pb-16">
-      <input
-        autoFocus
-        type="search"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Поиск по гайдам…"
-        className="w-full rounded-xl bg-tg-secondaryBg px-4 py-3 outline-none"
-      />
-      <div className="flex gap-2 text-sm">
+    <div className="p-5 space-y-4 pb-20">
+      <h2 className="font-display font-bold text-xl tracking-tight">
+        <span className="text-gold-gradient">Поиск</span>
+      </h2>
+
+      <div className="relative">
+        <input
+          autoFocus
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Название, тег, категория…"
+          className="w-full rounded-xl bg-obsidian-card border border-obsidian-border px-4 py-3 text-[14px] text-obsidian-text placeholder:text-obsidian-dim outline-none focus:border-gold/50 focus:shadow-gold-sm transition-all font-body"
+        />
+      </div>
+
+      <div className="flex gap-2">
         {(['all', 'free', 'paid'] as const).map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-3 py-1 rounded-full ${
-              filter === f ? 'bg-tg-button text-tg-buttonText' : 'bg-tg-secondaryBg text-tg-hint'
+            className={`px-3 py-1.5 rounded-full text-[12px] font-medium font-display border transition-all ${
+              filter === f
+                ? 'bg-gold/15 text-gold-bright border-gold/40'
+                : 'bg-obsidian-card text-obsidian-dim border-obsidian-border hover:border-gold/20 hover:text-obsidian-text'
             }`}
           >
             {f === 'all' ? 'Все' : f === 'free' ? 'Бесплатно' : 'Премиум'}
           </button>
         ))}
       </div>
-      <div className="space-y-2">
+
+      <div className="space-y-2 pt-2">
         {results.length === 0 ? (
-          <p className="text-tg-hint">Ничего не найдено.</p>
+          <p className="text-obsidian-dim text-sm">Ничего не найдено.</p>
         ) : (
           results.map((g) => <GuideCard key={g.id} guide={g} />)
         )}

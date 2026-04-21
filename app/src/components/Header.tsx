@@ -22,14 +22,22 @@ export function Header() {
   }, [isHome, navigate]);
 
   return (
-    <header className="sticky top-0 z-10 bg-tg-bg/90 backdrop-blur border-b border-tg-secondaryBg">
-      <div className="px-4 py-3 flex items-center gap-3">
-        <Link to="/" className="font-bold text-lg">ArcherCo Guides</Link>
-        <div className="ml-auto flex gap-2">
-          <Link to="/search" className="text-tg-link text-sm">Поиск</Link>
-          <Link to="/categories" className="text-tg-link text-sm">Категории</Link>
-          <Link to="/profile" className="text-tg-link text-sm">Профиль</Link>
-        </div>
+    <header className="sticky top-0 z-20 bg-obsidian-bg/85 backdrop-blur border-b border-obsidian-border">
+      <div className="px-4 py-3 flex items-center gap-4">
+        <Link to="/" className="flex items-center gap-2 group">
+          <span className="inline-block w-2 h-2 rounded-full bg-gold animate-pulse-dot" />
+          <span className="font-display font-bold text-[15px] tracking-tight text-obsidian-text group-hover:text-gold-bright transition-colors">
+            ArcherCo
+          </span>
+          <span className="font-display font-bold text-[15px] tracking-tight text-gold">
+            Guides
+          </span>
+        </Link>
+        <nav className="ml-auto flex gap-4 text-[13px] text-obsidian-dim font-medium">
+          <Link to="/search" className="hover:text-gold transition-colors">Поиск</Link>
+          <Link to="/categories" className="hover:text-gold transition-colors">Категории</Link>
+          <Link to="/profile" className="hover:text-gold transition-colors">Профиль</Link>
+        </nav>
       </div>
     </header>
   );

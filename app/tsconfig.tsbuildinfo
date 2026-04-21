@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/catalog.ts","./src/main.tsx","./src/telegram.ts","./src/types.ts","./src/components/guidecard.tsx","./src/components/header.tsx","./src/screens/categories.tsx","./src/screens/guide.tsx","./src/screens/home.tsx","./src/screens/profile.tsx","./src/screens/search.tsx","./src/utils/watermark.ts"],"version":"5.9.3"}

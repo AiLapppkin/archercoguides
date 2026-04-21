@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Увидеть реальность ИИ в 2026 — тезисы Андрея Карпатого</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #0a0712;
+  --bg-elev:   #120d1f;
+  --bg-card:   #151024;
+  --bg-deep:   #070510;
+  --fg:        #f0ebe0;
+  --fg-dim:    #a79fb0;
+  --fg-faint:  #6f6780;
+  --border:    #241d37;
+  --border-soft:#1a1428;
+  --amber:     #e8c154;
+  --amber-b:   #ffd970;
+  --violet:    #9d7cff;
+  --violet-b:  #b79aff;
+  --cyan:      #50e3c2;
+  --magenta:   #ff6b9d;
+  --grad-brand: linear-gradient(135deg,#e8c154 0%,#d18cff 55%,#9d7cff 100%);
+  --grad-text:  linear-gradient(92deg,#e8c154 0%,#f0ebe0 30%,#b79aff 65%,#9d7cff 100%);
+  --grad-line:  linear-gradient(90deg,transparent 0%,#e8c154 25%,#9d7cff 75%,transparent 100%);
+  --glow-amber: 0 0 40px rgba(232,193,84,.22),0 0 80px rgba(232,193,84,.07);
+  --glow-violet:0 0 40px rgba(157,124,255,.28),0 0 80px rgba(157,124,255,.09);
+  --glow-soft:  0 4px 32px rgba(0,0,0,.45);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 10% 5%,  rgba(232,193,84,.08)  0%, transparent 65%),
+    radial-gradient(ellipse 55% 55% at 90% 90%, rgba(157,124,255,.12) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(80,227,194,.03)  0%, transparent 70%),
+    linear-gradient(180deg, transparent 60%, rgba(7,5,16,.7) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: .035;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 0;
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--amber), var(--violet));
+  border-radius: 10px;
+  border: 2px solid var(--bg-deep);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(.78); opacity: .75; }
+}
+
+.fade-up { opacity: 0; transform: translateY(20px); }
+.fade-up.in {
+  opacity: 1; transform: translateY(0);
+  transition: opacity .7s cubic-bezier(.2,.9,.3,1), transform .7s cubic-bezier(.2,.9,.3,1);
+}
+
+/* ── NAV ── */
+nav.top {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(10,7,18,.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-soft);
+  padding: 0 clamp(16px, 4vw, 48px);
+}
+.nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 62px; gap: 16px;
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Unbounded', sans-serif; font-size: .85rem; font-weight: 700;
+  color: var(--fg); text-decoration: none;
+}
+.nav-meta {
+  font-family: 'JetBrains Mono', monospace; font-size: .7rem;
+  color: var(--fg-faint); letter-spacing: .05em;
+}
+.nav-meta b { color: var(--amber); font-weight: 600; }
+.pulse-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 8px var(--amber), 0 0 18px rgba(232,193,84,.5);
+  animation: pulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative; z-index: 1;
+  padding: clamp(56px, 9vw, 100px) clamp(16px, 4vw, 48px) clamp(28px, 4vw, 48px);
+  max-width: 1100px; margin: 0 auto;
+  text-align: center;
+}
+.hero-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .7rem; font-weight: 500;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--amber);
+  background: rgba(232,193,84,.08);
+  border: 1px solid rgba(232,193,84,.18);
+  border-radius: 999px; padding: 5px 14px;
+  margin-bottom: 24px;
+}
+.hero-label::before {
+  content: ''; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 6px var(--amber);
+  animation: pulse 2s ease-in-out infinite;
+}
+.hero h1 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(28px, 5.2vw, 58px);
+  font-weight: 700; line-height: 1.08; letter-spacing: -.02em;
+  background: var(--grad-text);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; color: var(--amber);
+  margin-bottom: 18px;
+}
+.hero-sub {
+  font-size: clamp(.95rem, 1.8vw, 1.12rem);
+  color: var(--fg-dim);
+  max-width: 640px; margin: 0 auto 32px;
+  line-height: 1.65;
+}
+.hero-line {
+  height: 1px;
+  background: var(--grad-line);
+  max-width: 480px; margin: 0 auto; opacity: .5;
+}
+
+/* ── VIDEO CARD ── */
+.video-wrap {
+  position: relative; z-index: 1;
+  max-width: 860px; margin: 0 auto clamp(36px, 5vw, 56px);
+  padding: 0 clamp(16px, 4vw, 48px);
+}
+.video-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color .2s, box-shadow .25s, transform .2s;
+  display: block;
+  text-decoration: none; color: inherit;
+}
+.video-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--grad-brand);
+  opacity: .55;
+  z-index: 2;
+}
+.video-card:hover {
+  border-color: rgba(232,193,84,.35);
+  box-shadow: 0 14px 48px rgba(0,0,0,.5), var(--glow-amber);
+  transform: translateY(-3px);
+}
+.video-thumb {
+  display: block; width: 100%; height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  filter: saturate(1.05) contrast(1.02);
+}
+.video-meta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-soft);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem; color: var(--fg-dim);
+  letter-spacing: .04em;
+}
+.video-meta .pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 11px; border-radius: 999px;
+  background: rgba(232,193,84,.08);
+  border: 1px solid rgba(232,193,84,.18);
+  color: var(--amber);
+  font-size: .66rem; letter-spacing: .14em; text-transform: uppercase;
+}
+.video-meta .pill.violet {
+  background: rgba(157,124,255,.1);
+  border-color: rgba(157,124,255,.22);
+  color: var(--violet-b);
+}
+.video-meta .title-line {
+  margin-left: auto;
+  font-size: .72rem; color: var(--fg-faint);
+  text-align: right;
+}
+
+/* ── ARTICLE LAYOUT ── */
+.article {
+  position: relative; z-index: 1;
+  max-width: 800px; margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 48px) clamp(40px, 6vw, 72px);
+}
+
+/* ── CALLOUTS ── */
+.callout {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: clamp(20px, 2.4vw, 28px);
+  margin: clamp(22px, 3vw, 32px) 0;
+  overflow: hidden;
+}
+.callout::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--grad-brand);
+  opacity: .5;
+}
+.callout.intro::before { background: linear-gradient(90deg, var(--amber), var(--amber-b)); opacity: .6; }
+.callout.goals::before { background: linear-gradient(90deg, var(--cyan), var(--amber)); opacity: .55; }
+.callout.keys::before  { background: linear-gradient(90deg, var(--amber), var(--magenta)); opacity: .6; }
+.callout.source::before{ background: linear-gradient(90deg, var(--violet), var(--amber-b)); opacity: .6; }
+
+.callout-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .68rem; font-weight: 600;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 12px;
+}
+.callout-label .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 8px rgba(232,193,84,.6);
+}
+.callout.goals .callout-label { color: var(--cyan); }
+.callout.goals .callout-label .dot { background: var(--cyan); box-shadow: 0 0 8px rgba(80,227,194,.6); }
+.callout.keys .callout-label { color: var(--amber-b); }
+.callout.keys .callout-label .dot { background: var(--amber-b); box-shadow: 0 0 8px rgba(255,217,112,.7); }
+.callout.source .callout-label { color: var(--violet-b); }
+.callout.source .callout-label .dot { background: var(--violet); box-shadow: 0 0 8px rgba(157,124,255,.6); }
+
+.callout p { font-size: 1rem; color: var(--fg-dim); line-height: 1.65; }
+.callout p + p { margin-top: 10px; }
+.callout ol, .callout ul { padding-left: 22px; margin: 6px 0 0; }
+.callout ol li, .callout ul li { color: var(--fg-dim); margin: 6px 0; line-height: 1.6; }
+.callout ol li::marker { color: var(--amber); font-family: 'JetBrains Mono', monospace; }
+.callout ul { list-style: none; padding-left: 0; }
+.callout ul li { position: relative; padding-left: 20px; }
+.callout ul li::before {
+  content: '▸';
+  position: absolute; left: 0; top: 0;
+  color: var(--amber); font-size: .85em;
+}
+
+/* ── CHAPTER (h2 section) ── */
+.chapter { margin: clamp(40px, 5vw, 64px) 0 0; scroll-margin-top: 80px; }
+.chapter-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.chapter-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .68rem; font-weight: 600;
+  letter-spacing: .14em;
+  color: var(--amber);
+  background: rgba(232,193,84,.08);
+  border: 1px solid rgba(232,193,84,.2);
+  border-radius: 999px;
+  padding: 3px 11px;
+}
+.chapter-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 8px rgba(232,193,84,.6);
+}
+.chapter-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .7rem; font-weight: 600;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--fg-faint);
+}
+.chapter h2 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(22px, 3.2vw, 32px);
+  font-weight: 600; line-height: 1.2; letter-spacing: -.015em;
+  color: var(--fg);
+  margin-bottom: 16px;
+}
+.chapter p { font-size: 1.02rem; color: var(--fg-dim); margin-bottom: 14px; line-height: 1.7; }
+.chapter p:last-child { margin-bottom: 0; }
+.chapter ul, .chapter ol { margin: 6px 0 16px; padding-left: 24px; }
+.chapter ul { list-style: none; padding-left: 0; }
+.chapter ul li { position: relative; padding-left: 22px; color: var(--fg-dim); margin: 8px 0; line-height: 1.6; }
+.chapter ul li::before {
+  content: '';
+  position: absolute; left: 4px; top: .75em;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--violet);
+  box-shadow: 0 0 6px rgba(157,124,255,.5);
+}
+.chapter ol li { color: var(--fg-dim); margin: 8px 0; padding-left: 4px; line-height: 1.6; }
+.chapter ol li::marker { color: var(--amber); font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+.chapter strong { color: var(--fg); font-weight: 600; }
+.chapter em { color: var(--amber-b); font-style: normal; font-weight: 500; }
+
+/* ── TOC ── */
+.toc-wrap {
+  position: relative; z-index: 1;
+  max-width: 860px; margin: 0 auto clamp(24px, 3vw, 36px);
+  padding: 0 clamp(16px, 4vw, 48px);
+}
+.toc {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  padding: 18px 20px;
+  background: rgba(21,16,36,.5);
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+}
+.toc a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .68rem; font-weight: 500; letter-spacing: .04em;
+  padding: 4px 11px; border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent; color: var(--fg-faint);
+  text-decoration: none;
+  transition: border-color .18s, color .18s, background .18s;
+  white-space: nowrap;
+}
+.toc a:hover {
+  border-color: rgba(232,193,84,.4);
+  color: var(--amber);
+  background: rgba(232,193,84,.06);
+}
+
+/* ── FOOTER ── */
+footer {
+  position: relative; z-index: 1;
+  padding: 40px clamp(16px, 4vw, 48px);
+  text-align: center;
+  border-top: 1px solid var(--border-soft);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .7rem;
+  color: var(--fg-faint);
+  letter-spacing: .04em;
+}
+footer a { color: var(--amber); text-decoration: none; }
+footer a:hover { color: var(--amber-b); }
+
+@media (max-width: 560px) {
+  .chapter h2 { font-size: clamp(20px, 5.5vw, 26px); }
+  .video-meta .title-line { margin-left: 0; text-align: left; width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">
+      <span class="pulse-dot"></span>
+      YOUTUBE · GUIDE
+    </a>
+    <span class="nav-meta"><b>13</b> тезисов · 40 мин</span>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-label">Andrej Karpathy · взгляд на 2026</div>
+  <h1>Увидеть реальность ИИ в 2026</h1>
+  <p class="hero-sub">Разбор интервью Карпатого: где ИИ действительно находится, почему индустрия переоценивает прорыв и какие механики обучения на самом деле сломаны.</p>
+  <div class="hero-line"></div>
+</section>
+
+<div class="video-wrap">
+  <a class="video-card fade-up" href="https://youtu.be/e4DjDpYlf4k" target="_blank" rel="noopener">
+    <img class="video-thumb" src="https://img.youtube.com/vi/e4DjDpYlf4k/maxresdefault.jpg" alt="Ключевые мысли от Andrej Karpathy">
+    <div class="video-meta">
+      <span class="pill">▶ YouTube</span>
+      <span class="pill violet">⏱ 40 мин</span>
+      <span class="title-line">Ключевые мысли от Andrej Karpathy, 2026</span>
+    </div>
+  </a>
+</div>
+
+<div class="toc-wrap fade-up">
+  <nav class="toc">
+    <a href="#ch-1">01 · Хайп</a>
+    <a href="#ch-2">02 · RL-шум</a>
+    <a href="#ch-3">03 · Призраки</a>
+    <a href="#ch-4">04 · Знания vs интеллект</a>
+    <a href="#ch-5">05 · Нет фазы сна</a>
+    <a href="#ch-6">06 · Когнитивное ядро</a>
+    <a href="#ch-7">07 · LLM-судьи</a>
+    <a href="#ch-8">08 · Код</a>
+    <a href="#ch-9">09 · Марш девяток</a>
+    <a href="#ch-10">10 · Экономика</a>
+    <a href="#ch-11">11 · Мультиагенты</a>
+    <a href="#ch-12">12 · Инсайты/сек</a>
+    <a href="#ch-13">13 · Книги и LLM</a>
+  </nav>
+</div>
+
+<article class="article">
+
+  <section class="callout intro fade-up">
+    <div class="callout-label"><span class="dot"></span>О чём этот гайд</div>
+    <p>Разбор интервью с Андреем Карпатым: где ИИ действительно находится в 2026-м, почему индустрия переоценивает прорыв и какие механики обучения на самом деле сломаны. Без хайпа, с конкретными аналогиями и примерами из практики.</p>
+  </section>
+
+  <section class="callout goals fade-up">
+    <div class="callout-label"><span class="dot"></span>Что ты освоишь</div>
+    <ol>
+      <li>Отличать реальный прогресс LLM от маркетингового шума при принятии решений по внедрению</li>
+      <li>Понимать, почему обучение с подкреплением (RL) даёт шумный сигнал и где оно ломается</li>
+      <li>Различать «накопленные знания» и «когнитивное ядро» в архитектуре моделей</li>
+      <li>Видеть, почему демонстрация агента ≠ продакшн, и закладывать это в планы</li>
+      <li>Применять принцип «инсайтов в секунду» в собственном обучении</li>
+    </ol>
+  </section>
+
+  <section class="chapter fade-up" id="ch-1">
+    <div class="chapter-header">
+      <span class="chapter-num">01</span>
+      <span class="chapter-dot"></span>
+      <span class="chapter-label">Хайп vs реальность</span>
+    </div>
+    <h2>Индустрия выдаёт желаемое за действительное</h2>
+    <p>Карпаты прямо называет текущее состояние посредственностью, которую продают как прорыв. Причина — структура стимулов: привлечение инвестиций и внимания конвертируется в деньги быстрее, чем честная оценка зрелости моделей.</p>
+    <p>Самая продвинутая модель, которой он пользуется лично, — <strong>GPT-5 Pro</strong>. Но «модели впечатляющие и требуют серьёзной доработки» — это про 2026 год, а не про «AGI на носу».</p>
+  </section>
+
+  <section class="chapter fade-up" id="ch-2">
+    <div class="chapter-header">
+      <span class="chapter-num">02</span>
+      <span class="chapter-dot"></span>
+      <span class="chapter-label">Обучение с подкреплением</span>
+    </div>
+    <h2>RL — это шум через соломинку</h2>
+    <p>Как устроен RL на математической задаче: модель делает сотни попыток, в конце получает одно число — правильно или нет. Этот один бит сигнала повышает вес <em>всех</em> токенов удачной траектории, включая заведомо неверные шаги по пути к правильному ответу.</p>
+    <p>Ключевая цитата: <em>«вы высасываете обучающий сигнал через соломинку»</em>. Человек так не учится — он анализирует, где ошибся, и корректирует конкретный шаг, а не всю траекторию целиком.</p>
+
+    <div class="callout keys" style="margin-top:20px">
+      <div class="callout-label"><span class="dot"></span>Что сломано в RL</div>
+      <ul>
+        <li>Высокая дисперсия — по сути это просто шум</li>
+        <li>Каждый неверный шаг на пути к правильному ответу получает премию</li>
+        <li>Нет механизма рефлексии — модель не отделяет «здесь я сделал правильно» от «здесь случайно повезло»</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="chapter fade-up" id="ch-3">
+    <div class="chapter-header">
+      <span class="chapter-num">03</span>
+      <span class="chapter-dot"></span>
+      <span class="chapter-label">Природа LLM</span>
+    </div>
+    <h2>Мы создаём не животных, а цифровых призраков</h2>
+    <p>Животные приходят в мир с врождёнными механизмами — жеребёнок бегает через минуты после рождения. Это не RL, это результат эволюционной оптимизации, закодированной в ДНК.</p>
+    <p>LLM не проходят эволюционный процесс — они имитируют людей через данные интернета. Поэтому аналогии с мозгом животных работают плохо. В своей статье Карпаты называет это <strong>цифровыми призраками или духами</strong>, а не цифровыми животными.</p>
+  </section>
+
+  <section class="chapter fade-up" id="ch-4">
+    <div class="chapter-header">
+      <span class="chapter-num">04</span>
+      <span class="chapter-dot"></span>
+      <span class="chapter-label">Архитектура памяти</span>
+    </div>
+    <h2>Знания vs интеллект: два продукта одного обучения</h2>
+    <p>Предобучение на предсказание следующего токена решает одновременно две задачи: модель <strong>копит знания</strong> и <strong>становится интеллектуальной</strong>. Проблема в том, что накопленные знания начинают тормозить развитие — модель слишком полагается на память.</p>
+    <p>Аналогия с памятью человека:</p>
+    <ul>
+      <li><strong>Веса модели</strong> — смутные воспоминания об интернете (15 триллионов токенов сжали в миллиарды параметров)</li>
+      <li><strong>KV-кэш и контекстное окно</strong> — рабочая память, напрямую доступная нейросети</li>
+    </ul>
+    <p>Отсюда трюк: если дать модели целую главу книги в контекст и потом задать вопрос, результат резко лучше, чем при опоре только на веса.</p>
+  </section>
+
+  <section class="chapter fade-up" id="ch-5">
+    <div class="chapter-header">
+      <span class="chapter-num">05</span>
+      <span class="chapter-dot"></span>
+      <span class="chapter-label">Дистилляция</span>
+    </div>
+    <h2>У LLM нет фазы сна</h2>
+    <p>У человека днём копится «контекстное окно» событий. Во сне происходит дистилляция — мозг переваривает опыт и частично переносит его в веса. У больших языковых моделей такой фазы нет.</p>
+    <p>Почему нельзя просто сгенерировать синтетические данные и дообучиться на них: образцы от модели <em>незаметно схлопнуты</em>. Отдельный пример выглядит нормально, но общее распределение — крошечная область возможного. Попроси ChatGPT анекдот — получишь один из трёх. Продолжишь обучение на этом — модель схлопнется окончательно.</p>
+  </section>
+
+  <section class="chapter fade-up" id="ch-6">
+    <div class="chapter-header">
+      <span class="chapter-num">06</span>
+      <span class="chapter-dot"></span>
+      <span class="chapter-label">Когнитивное ядро</span>
+    </div>
+    <h2>Меньше памяти — больше мышления</h2>
+    <p>Цель — вычленить интеллектуальную сущность, очищенную от фактов: алгоритмы мышления, стратегии, умение решать задачи. Фактов как можно меньше — пусть ищет в источниках, но думать умеет сама.</p>
+    <p>Прогноз Карпатого: через ~20 лет продуктивный разговор возможен с моделью <strong>всего на 1 миллиард параметров</strong>. Она будет знать, чего не знает, и действовать разумно.</p>
+    <p>Почему не получается сейчас: интернет как датасет — «полный мусор, тикеры акций, хлам со всех уголков». Модели приходится быть огромной, потому что большую часть параметров тратит на запоминание мусора, а не на когнитивную работу.</p>
+  </section>
+
+  <section class="chapter fade-up" id="ch-7">
+    <div class="chapter-header">
+      <span class="chapter-num">07</span>
+      <span class="chapter-dot"></span>
+      <span class="chapter-label">Вознаграждение</span>
+    </div>
+    <h2>LLM-судьи ломаются на состязательных примерах</h2>
+    <p>Типовой подход: даём судье частичное решение ученика, просим оценить, используем как награду в RL. Работает 10–20 шагов. На сотне шагов обучаемая модель находит лазейку.</p>
+    <p>Конкретный случай из практики Карпатого: обучали модель, вознаграждение резко взлетело, «ученик идеально решает всё». Смотрим на ответ — начинается нормально, потом превращается в <em>«дадада дада»</em>. LLM-судья для этой бессмыслицы присваивает 100% — это состязательный пример, которого не было в его обучающей выборке.</p>
+    <p>Добавить бессмыслицу в датасет судьи как 0% — можно, но состязательных примеров бесконечно много. Нужны другие идеи.</p>
+  </section>
+
+  <section class="chapter fade-up" id="ch-8">
+    <div class="chapter-header">
+      <span class="chapter-num">08</span>
+      <span class="chapter-dot"></span>
+      <span class="chapter-label">Агенты и код</span>
+    </div>
+    <h2>Программирование — идеальная первая цель</h2>
+    <p>Почему именно код:</p>
+    <ul>
+      <li>Весь стек вокруг кода построен на тексте — терминалы, редакторы, diff-ы</li>
+      <li>LLM обучены на интернете и отлично обрабатывают текст</li>
+      <li>Обучающих данных по коду — горы</li>
+      <li>Инфраструктура (IDE, просмотр diff, подсветка синтаксиса) давно готова к интеграции</li>
+    </ul>
+    <p>Где агенты хороши: шаблонный, копи-паст код. Где проваливаются: уникальные репозитории с нестандартной структурой (Карпаты приводит nanochat — агенты постоянно «возвращали его к стандартным подходам из интернета», хотя код такой не использовал).</p>
+
+    <div class="callout keys" style="margin-top:20px">
+      <div class="callout-label"><span class="dot"></span>Почему прогнозы сроков консервативны</div>
+      <p>Модели плохо справляются с написанием кода, <strong>которого раньше не существовало</strong>. А это и есть работа по созданию новых моделей и систем. Концепцию понимают — интегрировать в конкретный репозиторий, стиль и допущения проекта пока не умеют.</p>
+    </div>
+  </section>
+
+  <section class="chapter fade-up" id="ch-9">
+    <div class="chapter-header">
+      <span class="chapter-num">09</span>
+      <span class="chapter-dot"></span>
+      <span class="chapter-label">Путь до продакшна</span>
+    </div>
+    <h2>Марш девяток: демо ≠ продукт</h2>
+    <p>Каждая девятка после запятой требует одинакового объёма работы. 90% → 99% → 99.9% — это не плавный прогресс, это три полных цикла. За 5 лет в Tesla Карпаты прошёл «две, может быть, три» таких девятки надёжности.</p>
+    <p>Отсюда личный фильтр: <em>«меня совершенно не впечатляют никакие демо»</em>. Про роботакси: телеуправление с людьми в контуре всё ещё активно — человек не ушёл из системы, он просто переехал туда, где не виден.</p>
+  </section>
+
+  <section class="chapter fade-up" id="ch-10">
+    <div class="chapter-header">
+      <span class="chapter-num">10</span>
+      <span class="chapter-dot"></span>
+      <span class="chapter-label">Экономика внедрения</span>
+    </div>
+    <h2>Автоматизация, а не взрыв</h2>
+    <p>Влияние ИИ на ВВП, скорее всего, не будет резким скачком. Компьютеры, мобильные, iPhone — все эти «сейсмические сдвиги» размазаны во времени и усреднились в ту же экспоненту роста.</p>
+    <p>Рабочая модель внедрения: агенты возьмут ~80% рутины (например, колл-центры), человек будет курировать команды из пяти ИИ-систем. Ожидаются новые интерфейсы — прослойка для управления «не идеальными» системами.</p>
+  </section>
+
+  <section class="chapter fade-up" id="ch-11">
+    <div class="chapter-header">
+      <span class="chapter-num">11</span>
+      <span class="chapter-dot"></span>
+      <span class="chapter-label">Что за горизонтом</span>
+    </div>
+    <h2>Культура и самоигра для мультиагентов</h2>
+    <p>Две мощные идеи мультиагентных систем, которые ещё никто по-настоящему не реализовал:</p>
+    <ol>
+      <li><strong>Культура</strong> — LLM создают и накапливают собственную базу знаний, передают её друг другу</li>
+      <li><strong>Самоигра</strong> — одна LLM генерирует задачи, другая их решает, первая постепенно усложняет</li>
+    </ol>
+    <p>Карпаты сравнивает нынешних Claude Code и Codex с «учениками начальной школы»: сдают тесты уровня аспирантуры, но когнитивно — дети младших классов.</p>
+  </section>
+
+  <section class="chapter fade-up" id="ch-12">
+    <div class="chapter-header">
+      <span class="chapter-num">12</span>
+      <span class="chapter-dot"></span>
+      <span class="chapter-label">Метод обучения</span>
+    </div>
+    <h2>Как учиться быстрее: инсайты в секунду</h2>
+    <p>Личный приём Карпатого при оценке проекта или объяснения — максимум <strong>инсайтов в секунду</strong> (приростов понимания в единицу времени). Именно по этому критерию он строил nanochat.</p>
+    <p>Что работает:</p>
+    <ul>
+      <li><strong>Физика как фундамент мышления.</strong> Не ради знаний, а ради привычки строить модели: приближение первого порядка, сферическая корова, выделение главного из шума</li>
+      <li><strong>Принцип Фейнмана.</strong> «Если я не могу это построить — я этого не понимаю». Пишите код, а не блогпосты и презентации</li>
+      <li><strong>Учиться по мере необходимости.</strong> Целенаправленное углубление под конкретную задачу + фоновое широкое знакомство с темами</li>
+      <li><strong>Репетитор 1:1.</strong> Хороший репетитор после короткого разговора точно понимает, что ты знаешь и не знаешь, и подаёт задачи «в меру сложными». Ни одна LLM в 2026 этого пока не умеет</li>
+    </ul>
+  </section>
+
+  <section class="chapter fade-up" id="ch-13">
+    <div class="chapter-header">
+      <span class="chapter-num">13</span>
+      <span class="chapter-dot"></span>
+      <span class="chapter-label">Чтение и обучение</span>
+    </div>
+    <h2>Книга для LLM ≠ книга для человека</h2>
+    <p>Когда человек читает книгу, она — стимул, чтобы генерировать мысли в голове, обсуждать с друзьями, манипулировать информацией. LLM просто предсказывает следующий токен из текста.</p>
+    <p>Чего не хватает предобучению: фазы, где модель обдумывает материал, пытается согласовать с тем, что уже знает, и возвращает переработанное в веса. Статьи на эту тему появляются, но убедительного решения для фронтирной лаборатории пока нет.</p>
+  </section>
+
+  <section class="callout keys fade-up">
+    <div class="callout-label"><span class="dot"></span>Ключевые мысли</div>
+    <ol>
+      <li>GPT-5 Pro — текущий потолок; индустрия продаёт посредственность как прорыв из-за структуры инвестиций</li>
+      <li>RL даёт один бит сигнала на всю траекторию — это шум, но лучшее, что у нас есть</li>
+      <li>LLM — цифровые призраки, а не цифровые животные: у них нет эволюции и нет фазы сна для дистилляции</li>
+      <li>Модель 1B параметров с правильным когнитивным ядром побьёт современных монстров через ~20 лет</li>
+      <li>Демо — это первая девятка; продакшн — это марш до пятой. Закладывай кратное время</li>
+    </ol>
+  </section>
+
+  <section class="callout source fade-up">
+    <div class="callout-label"><span class="dot"></span>Источник</div>
+    <p>Видео: <a href="https://youtu.be/e4DjDpYlf4k" target="_blank" rel="noopener" style="color:var(--amber);text-decoration:none;border-bottom:1px dashed rgba(232,193,84,.4)">Ключевые мысли от Andrej Karpathy, которые нужно знать в 2026 году</a> · 40 минут · спикер — Andrej Karpathy, ведущий — Пётр.</p>
+  </section>
+
+</article>
+
+<footer>
+  Гайд собран из видео · <a href="https://youtu.be/e4DjDpYlf4k" target="_blank" rel="noopener">открыть оригинал на YouTube</a>
+</footer>
+
+<script>
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🚀 5 GitHub-репозиториев, которые прокачают Claude Code</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --surface: #151822;
+    --surface-2: #1b1f2b;
+    --border: #262b39;
+    --text: #e7e9ee;
+    --muted: #9aa3b2;
+    --accent: #7cc4ff;
+    --accent-2: #b794f6;
+    --ok: #64d39a;
+    --warn: #ffb454;
+    --code-bg: #0b0d12;
+    --code-border: #2a3042;
+    --radius: 14px;
+    --radius-sm: 10px;
+    --maxw: 780px;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f6f7fb;
+      --surface: #ffffff;
+      --surface-2: #f0f2f8;
+      --border: #e3e6ee;
+      --text: #161821;
+      --muted: #5b6474;
+      --accent: #2563eb;
+      --accent-2: #7c3aed;
+      --ok: #0f8f5a;
+      --warn: #b86a00;
+      --code-bg: #0f1115;
+      --code-border: #262b39;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  main {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  .hero {
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 40px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .hero-thumb {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    filter: saturate(1.05);
+  }
+  .hero-meta {
+    padding: 20px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+  .hero-meta a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dashed color-mix(in srgb, var(--accent) 40%, transparent);
+  }
+  .hero-meta a:hover { border-bottom-color: var(--accent); }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  h1 {
+    font-size: clamp(28px, 4.6vw, 40px);
+    line-height: 1.15;
+    margin: 0 0 24px;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+  }
+  h1 .icon {
+    display: inline-block;
+    margin-right: 10px;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,.25));
+  }
+  h2 {
+    font-size: 24px;
+    line-height: 1.25;
+    margin: 40px 0 14px;
+    letter-spacing: -0.005em;
+    font-weight: 650;
+  }
+  h3 {
+    font-size: 18px;
+    margin: 24px 0 10px;
+    font-weight: 600;
+  }
+  p { margin: 0 0 14px; }
+  a { color: var(--accent); }
+  hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 36px 0;
+  }
+  ol, ul { padding-left: 22px; margin: 0 0 14px; }
+  ol li, ul li { margin: 6px 0; }
+  ol { list-style: decimal; }
+  ul { list-style: none; padding-left: 0; }
+  ul li {
+    position: relative;
+    padding-left: 22px;
+  }
+  ul li::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 0.72em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-2);
+  }
+  strong { color: var(--text); font-weight: 650; }
+  em { color: var(--accent-2); font-style: normal; font-weight: 500; }
+
+  code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 6px;
+  }
+  pre {
+    background: var(--code-bg);
+    color: #e7e9ee;
+    border: 1px solid var(--code-border);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-size: 14px;
+    line-height: 1.55;
+    margin: 16px 0;
+  }
+  pre code {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+  }
+
+  .callout {
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 18px 22px;
+    margin: 22px 0;
+    position: relative;
+  }
+  .callout h3 {
+    margin: 0 0 10px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.01em;
+    text-transform: none;
+  }
+  .callout p:last-child, .callout ol:last-child, .callout ul:last-child { margin-bottom: 0; }
+
+  .callout-intro   { border-left: 3px solid var(--accent); }
+  .callout-goals   { border-left: 3px solid var(--ok); }
+  .callout-keys    { border-left: 3px solid var(--warn); }
+  .callout-source  { border-left: 3px solid var(--accent-2); background: var(--surface-2); }
+
+  footer {
+    margin-top: 64px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+  }
+  footer a { color: var(--muted); }
+
+  @media (max-width: 560px) {
+    main { padding: 24px 16px 64px; }
+    h2 { font-size: 21px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="hero">
+    <a href="https://youtube.com/shorts/5IRjY57Q3dY?is=U2XZEzd9JlcrATgP" target="_blank" rel="noopener">
+      <img class="hero-thumb" src="https://img.youtube.com/vi/5IRjY57Q3dY/maxresdefault.jpg" alt="5 Github Repos That Will 10x Your Next Claude Code Project">
+    </a>
+    <div class="hero-meta">
+      <span class="pill">▶ YouTube Shorts</span>
+      <span class="pill">⏱ 1 мин</span>
+      <span>Источник: <a href="https://youtube.com/shorts/5IRjY57Q3dY?is=U2XZEzd9JlcrATgP" target="_blank" rel="noopener">5 Github Repos That Will 10x Your Next Claude Code Project</a></span>
+    </div>
+  </div>
+
+  <h1><span class="icon">🚀</span>5 GitHub-репозиториев, которые прокачают Claude Code</h1>
+
+  <section class="callout callout-intro">
+    <h3>💡 О чём этот гайд</h3>
+    <p>Подборка пяти репозиториев, которые превращают Claude Code из универсального ассистента в специализированный рабочий инструмент: дизайн-системы, spec-driven разработка, n8n-автоматизация, второй мозг в Obsidian и общая библиотека готовых воркфлоу.</p>
+  </section>
+
+  <section class="callout callout-goals">
+    <h3>✅ Что ты освоишь</h3>
+    <ol>
+      <li>Как генерировать уникальные UI вместо типового AI-слопа через UIUX Promax</li>
+      <li>Как запустить spec-driven проект с sub-агентами через GSD framework</li>
+      <li>Как дать Claude Code доступ к 1000+ нодам n8n через MCP-сервер</li>
+      <li>Как превратить Obsidian в долговременную память ассистента</li>
+      <li>Как быстро собрать стек скиллов и команд через Awesome Claude Code</li>
+    </ol>
+  </section>
+
+  <hr>
+
+  <h2>1. Подключить UIUX Promax для уникальных интерфейсов</h2>
+  <p>Repo делает то же, что стандартный frontend-design skill, но на стероидах. Внутри — интеллектуальная генерация дизайн-систем: под каждый тип продукта подбирается своя система, а не шаблонный набор кнопок и карточек.</p>
+  <ul>
+    <li>Подключай, когда делаешь лендинг, SaaS-панель или мобильное приложение с нуля</li>
+    <li>Используй для отхода от узнаваемого «AI-look» в интерфейсах</li>
+  </ul>
+
+  <h2>2. Запустить проект с GSD framework</h2>
+  <p>GSD (Get Stuff Done) — spec-driven development поверх Claude Code. Автор ролика называет его своим постоянным инструментом для новых проектов.</p>
+  <ul>
+    <li>Автоматически управляет sub-агентами</li>
+    <li>Борется с context window rot — деградацией длинных контекстов</li>
+    <li>Подходит для проектов с нуля, где нужна дисциплина спецификации</li>
+  </ul>
+
+  <h2>3. Дать Claude Code суперсилу в n8n через MCP-сервер</h2>
+  <p>Claude Code и сам неплохо собирает n8n-воркфлоу. Но с этим MCP-сервером он получает доступ к реальной базе нод и документации.</p>
+  <ol>
+    <li>Более <strong>1000 нод</strong> с описаниями свойств и операций</li>
+    <li>Полная документация по каждой ноде</li>
+    <li>Почти <strong>3000 реальных примеров</strong> воркфлоу</li>
+  </ol>
+
+  <section class="callout">
+    <h3>⚠️ Когда стоит подключать</h3>
+    <p>MCP-сервер тяжёлый — жрёт контекст. Включай только под сложные n8n-задачи, а не «на всякий случай».</p>
+  </section>
+
+  <h2>4. Собрать второй мозг через Obsidian Skills</h2>
+  <p>Репозиторий связывает Claude Code с Obsidian — одним из лучших инструментов для личной базы знаний. Ассистент начинает помнить всё: решения, контекст проектов, накопленные заметки.</p>
+  <ul>
+    <li>Подключай, если хочешь долговременную память вместо «всё забыл после рестарта сессии»</li>
+    <li>Особенно полезно для исследовательских и пишущих задач</li>
+  </ul>
+
+  <h2>5. Собрать арсенал через Awesome Claude Code</h2>
+  <p>One-stop shop: скиллы, воркфлоу, инструменты, команды. Подходит, когда не хочешь изобретать велосипед — заходишь, берёшь готовое, адаптируешь.</p>
+  <ul>
+    <li>Используй как стартовый каталог при настройке нового окружения</li>
+    <li>Смотри сюда раньше, чем писать кастомный скилл с нуля</li>
+  </ul>
+
+  <hr>
+
+  <section class="callout callout-keys">
+    <h3>🔑 Ключевые мысли</h3>
+    <ol>
+      <li>Базовый Claude Code — лишь фундамент. Реальную мощь дают правильные MCP-серверы и скиллы поверх него</li>
+      <li>Spec-driven подход (GSD) решает главную боль длинных проектов — потерю контекста и хаос в sub-агентах</li>
+      <li>Специализированные MCP-серверы нужны точечно: n8n MCP даёт тысячи нод, но тяжёлый и не для каждой задачи</li>
+      <li>Долговременная память через Obsidian превращает ассистента из «одноразового» в накопительного</li>
+      <li>Перед тем как писать своё — проверь Awesome Claude Code, скорее всего готовое уже есть</li>
+    </ol>
+  </section>
+
+  <section class="callout callout-source">
+    <h3>🔗 Источник</h3>
+    <p><a href="https://youtube.com/shorts/5IRjY57Q3dY?is=U2XZEzd9JlcrATgP" target="_blank" rel="noopener">5 Github Repos That Will 10x Your Next Claude Code Project</a> — YouTube Shorts, ~1 мин.</p>
+  </section>
+
+  <footer>
+    Гайд собран из видео · <a href="https://youtube.com/shorts/5IRjY57Q3dY?is=U2XZEzd9JlcrATgP" target="_blank" rel="noopener">открыть оригинал на YouTube</a>
+  </footer>
+</main>
+</body>
+</html>

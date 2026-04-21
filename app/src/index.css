@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light dark;
+}
+
+html, body, #root {
+  min-height: 100vh;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+}
+
+.watermark-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: var(--wm-image, none);
+  background-repeat: repeat;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+}
+
+.guide-content {
+  line-height: 1.6;
+}
+
+.guide-content h1, .guide-content h2, .guide-content h3 {
+  font-weight: 700;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+}
+
+.guide-content p { margin: 0.75em 0; }
+.guide-content ul, .guide-content ol { margin: 0.75em 0; padding-left: 1.5em; }
+.guide-content code { background: var(--tg-theme-secondary-bg-color, #f1f1f1); padding: 0.1em 0.3em; border-radius: 4px; }
+.guide-content pre { background: var(--tg-theme-secondary-bg-color, #f1f1f1); padding: 1em; border-radius: 8px; overflow-x: auto; }
+.guide-content img { max-width: 100%; height: auto; border-radius: 8px; }
+.guide-content a { color: var(--tg-theme-link-color, #2481cc); text-decoration: underline; }

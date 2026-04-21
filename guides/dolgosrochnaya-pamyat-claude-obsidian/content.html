@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🧠 Настроить долгосрочную память Claude через Obsidian</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --surface: #151822;
+    --surface-2: #1b1f2b;
+    --border: #262b39;
+    --text: #e7e9ee;
+    --muted: #9aa3b2;
+    --accent: #7cc4ff;
+    --accent-2: #b794f6;
+    --ok: #64d39a;
+    --warn: #ffb454;
+    --code-bg: #0b0d12;
+    --code-border: #2a3042;
+    --radius: 14px;
+    --radius-sm: 10px;
+    --maxw: 780px;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f6f7fb;
+      --surface: #ffffff;
+      --surface-2: #f0f2f8;
+      --border: #e3e6ee;
+      --text: #161821;
+      --muted: #5b6474;
+      --accent: #2563eb;
+      --accent-2: #7c3aed;
+      --ok: #0f8f5a;
+      --warn: #b86a00;
+      --code-bg: #0f1115;
+      --code-border: #262b39;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  main {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  .hero {
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 40px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .hero-thumb {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    filter: saturate(1.05);
+  }
+  .hero-meta {
+    padding: 20px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+  .hero-meta a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dashed color-mix(in srgb, var(--accent) 40%, transparent);
+  }
+  .hero-meta a:hover { border-bottom-color: var(--accent); }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  h1 {
+    font-size: clamp(28px, 4.6vw, 40px);
+    line-height: 1.15;
+    margin: 0 0 24px;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+  }
+  h1 .icon {
+    display: inline-block;
+    margin-right: 10px;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,.25));
+  }
+  h2 {
+    font-size: 24px;
+    line-height: 1.25;
+    margin: 40px 0 14px;
+    letter-spacing: -0.005em;
+    font-weight: 650;
+  }
+  h3 {
+    font-size: 18px;
+    margin: 24px 0 10px;
+    font-weight: 600;
+  }
+  p { margin: 0 0 14px; }
+  a { color: var(--accent); }
+  hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 36px 0;
+  }
+  ol, ul { padding-left: 22px; margin: 0 0 14px; }
+  ol li, ul li { margin: 6px 0; }
+  ol { list-style: decimal; }
+  ul { list-style: none; padding-left: 0; }
+  ul li {
+    position: relative;
+    padding-left: 22px;
+  }
+  ul li::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 0.72em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-2);
+  }
+  strong { color: var(--text); font-weight: 650; }
+  em { color: var(--accent-2); font-style: normal; font-weight: 500; }
+
+  code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 6px;
+  }
+  pre {
+    background: var(--code-bg);
+    color: #e7e9ee;
+    border: 1px solid var(--code-border);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-size: 14px;
+    line-height: 1.55;
+    margin: 16px 0;
+  }
+  pre code {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+  }
+
+  .callout {
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 18px 22px;
+    margin: 22px 0;
+    position: relative;
+  }
+  .callout h3 {
+    margin: 0 0 10px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.01em;
+    text-transform: none;
+  }
+  .callout p:last-child, .callout ol:last-child, .callout ul:last-child { margin-bottom: 0; }
+
+  .callout-intro   { border-left: 3px solid var(--accent); }
+  .callout-goals   { border-left: 3px solid var(--ok); }
+  .callout-keys    { border-left: 3px solid var(--warn); }
+  .callout-source  { border-left: 3px solid var(--accent-2); background: var(--surface-2); }
+
+  .arch-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .arch-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+  }
+  .arch-card-title {
+    font-weight: 650;
+    font-size: 15px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .arch-card p {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 0;
+  }
+  @media (max-width: 560px) {
+    .arch-grid { grid-template-columns: 1fr; }
+    main { padding: 24px 16px 64px; }
+    h2 { font-size: 21px; }
+  }
+
+  footer {
+    margin-top: 64px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+  }
+  footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <div class="hero">
+    <a href="https://youtu.be/eg5cWYK5Q04" target="_blank" rel="noopener">
+      <img class="hero-thumb" src="https://img.youtube.com/vi/eg5cWYK5Q04/maxresdefault.jpg" alt="Claude Code + Obsidian ВЗОРВАЛИ Интернет (Метод Андрея Карпати)">
+    </a>
+    <div class="hero-meta">
+      <span class="pill">▶ YouTube</span>
+      <span class="pill">⏱ 23 мин</span>
+      <span>Источник: <a href="https://youtu.be/eg5cWYK5Q04" target="_blank" rel="noopener">Claude Code + Obsidian ВЗОРВАЛИ Интернет (Метод Андрея Карпати)</a></span>
+    </div>
+  </div>
+
+  <h1><span class="icon">🧠</span>Настроить долгосрочную память Claude через Obsidian</h1>
+
+  <section class="callout callout-intro">
+    <h3>💡 О чём этот гайд</h3>
+    <p>Видео разбирает систему <strong>Obsidian RAG</strong> от Андрея Карпати — способ дать Claude самообновляющуюся долгосрочную память через локальную папку с markdown-файлами. Плюс честный разбор ограничений, о которых не говорят в 99% обзоров, и полная 4-компонентная архитектура, которая реально работает на дистанции.</p>
+  </section>
+
+  <section class="callout callout-goals">
+    <h3>✅ Что ты освоишь</h3>
+    <ol>
+      <li>Как настроить Obsidian + Claude Code по методу Карпати с нуля</li>
+      <li>Как подать Клоду стартовый промт и создать структуру базы знаний</li>
+      <li>Как добавить материалы через Web Clipper одним кликом</li>
+      <li>Почему классический Obsidian RAG сыпется при масштабировании — и как этого избежать</li>
+      <li>Как выстроить 4-компонентную систему памяти: CLAUDE.md + Obsidian + Pinecone + Notebook LM</li>
+    </ol>
+  </section>
+
+  <hr>
+
+  <h2>1. Понять проблему, которую решает система</h2>
+
+  <p>Claude страдает амнезией. При переполненном контекстном окне он начинает уверенно галлюцинировать — и это самое опасное: ошибки звучат как факты.</p>
+
+  <p>В обычной работе это случается в ~1% случаев. Но когда контекста в чате много — шанс растёт до 10%. Практический пример: провёл трёхчасовой созвон с клиентом, договорился о деталях — на следующий день Клод не помнит ничего. Потеря контекста = потеря клиента.</p>
+
+  <p><strong>Решение Карпати:</strong> дать Claude права на чтение и запись в локальную папку. Он сам создаёт там структуру, пишет заметки, организует их. Папка работает параллельно с контекстным окном — и остаётся между сессиями.</p>
+
+  <section class="callout callout-intro">
+    <h3>💡 Чем это отличается от классического RAG</h3>
+    <p><strong>Обычный RAG (день сурка):</strong> загружаешь PDF → задаёшь вопрос → Клод отвечает → забывает. Завтра повторяй с нуля.</p>
+    <p><strong>Метод Карпати (снежный ком):</strong> каждый новый источник укрепляет базу. Знания накапливаются. Одна статья — 15 обновлённых страниц за один проход.</p>
+  </section>
+
+  <h2>2. Скачать и открыть Obsidian</h2>
+
+  <ol>
+    <li>Зайди на официальный сайт <strong>obsidian.md</strong> и скачай приложение под свою систему.</li>
+    <li>Установи и открой. Папку хранилища пока не создавай — пусть Claude сделает это сам.</li>
+    <li>В настройках Obsidian зайди в раздел <strong>Файлы и ссылки</strong> и укажи папку по умолчанию для вложений (например, <code>изображения</code>). Это нужно, чтобы все картинки из Web Clipper лежали аккуратно в одном месте.</li>
+    <li>Включи тёмную тему, если хочется: <strong>Настройки → Оформление → Тёмная тема</strong>.</li>
+  </ol>
+
+  <h2>3. Запустить Claude Code и отправить промт Карпати</h2>
+
+  <ol>
+    <li>Открой Claude Code (Antigravity или терминал).</li>
+    <li>Создай новую папку проекта — например, <code>Jarvis</code>. Это имя твоей системы памяти.</li>
+    <li>Запусти Claude Code: нажми <strong>Extensions → выбери расширение → Ctrl+L</strong> для закрытия правого окна.</li>
+    <li>Напиши Клоду стартовую команду:
+      <pre><code>Привет. Я хочу, чтобы ты создал структуру папок по образцу, который я тебе сейчас кину.
+Если есть вопросы — задавай, но в целом просто следуй инструкции,
+создай каркас моей базы знаний.
+[вставь сюда промт Карпати с GitHub]</code></pre>
+    </li>
+    <li>Полный промт Карпати есть в описании к видео по первой ссылке. Вставляй как есть.</li>
+  </ol>
+
+  <p>Claude создаст файлы <code>INDEX.md</code>, <code>LOCK.md</code> и базовую структуру папок.</p>
+
+  <h3>Структура папок</h3>
+
+  <p>Вся система держится на трёх компонентах:</p>
+
+  <ul>
+    <li><strong><code>raw/</code></strong> — сырые исходники: статьи, PDF, транскрипты YouTube. Файлы сюда кладутся и не трогаются.</li>
+    <li><strong><code>wiki/</code></strong> — заметки, которые Claude пишет сам на основе исходников. Концепты, профили, идеи, связи.</li>
+    <li><strong><code>CLAUDE.md</code></strong> — системный файл с правилами. Объясняет Клоду, как вести эту базу. Превращает его из чатбота в дисциплинированного wiki-редактора.</li>
+  </ul>
+
+  <h2>4. Открыть папку в Obsidian</h2>
+
+  <ol>
+    <li>Вернись в Obsidian.</li>
+    <li>Нажми <strong>Открыть папку</strong> и выбери папку, которую создал Claude (например, <code>Jarvis</code>).</li>
+    <li>Открой <strong>Граф</strong> в левой панели.</li>
+  </ol>
+
+  <p>Ты увидишь сеть узлов — визуальную карту знаний. Узлы — это заметки, стрелки — связи между ними. Чем больше материалов загружаешь, тем гуще паутина.</p>
+
+  <section class="callout callout-intro">
+    <h3>💡 Два окна, одна папка</h3>
+    <p>Держи открытыми два окна одновременно: Claude Code (пишет и читает файлы) и Obsidian (показывает ту же папку визуально). Это не два разных проекта — это один и тот же проект с двух точек зрения.</p>
+  </section>
+
+  <h2>5. Добавить первый материал</h2>
+
+  <p>Напиши Клоду в новом чате, открыв папку проекта:</p>
+
+  <pre><code>Я хочу сделать Вики по [твоя тема]. Назовём её Jarvis — мой персональный ассистент,
+который знает меня и помогает принимать лучшие решения.
+Я буду кидать тебе статьи, кейсы, идеи, инструменты.
+Сначала вот мой первый URL. Пройдись по нему, собери весь контент и картинки,
+разложи по папкам raw/source и сделай первую wiki-страницу.
+[вставь ссылку]</code></pre>
+
+  <p>Claude прочитает статью, скачает изображения, создаст wiki-страницы с концептами и перелинкует их между собой.</p>
+
+  <h3>Три операции с базой</h3>
+
+  <ol>
+    <li><strong>Добавить материал</strong> — закидываешь URL или файл, Claude интегрирует в базу.</li>
+    <li><strong>Задать вопрос</strong> — открываешь папку в Claude Code, пишешь запрос. Клод просматривает wiki, переходит по ссылкам, выдаёт ответ с указанием файлов-источников.</li>
+    <li><strong>Линтинг</strong> — раз в пару недель просишь Claude проверить базу: найти битые ссылки, противоречия, сомнительные утверждения и навести порядок.</li>
+  </ol>
+
+  <h2>6. Подключить Obsidian Web Clipper</h2>
+
+  <ol>
+    <li>Открой интернет-магазин Chrome (или своего браузера).</li>
+    <li>Найди расширение <strong>Obsidian Web Clipper</strong> и установи.</li>
+    <li>Закрепи иконку на панели расширений.</li>
+    <li>Зайди в настройки клиппера и пропиши путь сохранения — например, <code>raw/web-clip</code> в твоём хранилище Jarvis.</li>
+  </ol>
+
+  <p>Теперь на любой статье нажимаешь иконку — клиппер сам вытягивает текст и сохраняет в нужную папку. Claude увидит новый файл при следующем запросе.</p>
+
+  <h2>7. Понять ограничения классического Obsidian RAG</h2>
+
+  <section class="callout callout-keys">
+    <h3>⚠️ Три проблемы, о которых молчат обзорщики</h3>
+    <ol>
+      <li><strong>Раздутый INDEX.md.</strong> Одно описание файла весит ~75 токенов. При 100 файлах — 7 500 токенов на каждый запрос. При 10 000 файлах — 750 000 токенов. Claude вынужден перечитывать весь индекс при каждом обращении. Это прямые деньги из бюджета.</li>
+      <li><strong>Нет семантического поиска.</strong> Система ищет по темам и ключевым словам, а не по смыслу. Синонимы и контекст она не понимает.</li>
+      <li><strong>Не рассчитана на большие объёмы.</strong> Obsidian RAG — магия на 100 заметках. На 10 000 — разоришься и сойдёшь с ума.</li>
+    </ol>
+  </section>
+
+  <p><strong>Правило:</strong> Obsidian — для того, что постоянно меняется (идеи, черновики, активные проекты). Для статичных архивов (транскрипты, архивы переписок, книги) — нужен Pinecone.</p>
+
+  <h2>8. Выстроить полную архитектуру памяти</h2>
+
+  <p>Правильная система состоит из четырёх компонентов, которые не конкурируют, а дополняют друг друга:</p>
+
+  <div class="arch-grid">
+    <div class="arch-card">
+      <div class="arch-card-title">📄 CLAUDE.md</div>
+      <p><strong>Личность и правила.</strong> Досье сотрудника: имя, роль, жёсткие инструкции. Клод читает этот файл первым делом. Никогда не меняется.</p>
+    </div>
+    <div class="arch-card">
+      <div class="arch-card-title">🔷 Obsidian</div>
+      <p><strong>Мастерская.</strong> Активная мыслительная работа: черновики, заметки, текущие проекты. Связи между идеями. Здесь происходит анализ.</p>
+    </div>
+    <div class="arch-card">
+      <div class="arch-card-title">🗄️ Pinecone</div>
+      <p><strong>Склад.</strong> Гигантский архив статичных данных: транскрипты, книги, архивы писем. Векторизирует текст без участия Claude — в сотни раз дешевле.</p>
+    </div>
+    <div class="arch-card">
+      <div class="arch-card-title">📓 Notebook LM</div>
+      <p><strong>Глубокое погружение.</strong> Бесплатный инструмент от Google. До 300 источников за раз — для задач, которые обычный Claude не потянет.</p>
+    </div>
+  </div>
+
+  <h3>Когда использовать Pinecone вместо Obsidian</h3>
+
+  <p>Если у тебя есть двухчасовой транскрипт вебинара — не загружай в Obsidian. Запусти скрипт векторизации: он переведёт текст в числа и положит в Pinecone. Тяжёлый Claude в этом процессе вообще не участвует.</p>
+
+  <p>При следующем запросе Pinecone за миллисекунду найдёт нужный абзац среди миллионов строк и отдаст только его. Чтобы подключить Pinecone к Claude, просто напиши в чате: <em>«Подключись к моему Pinecone»</em> — и он проведёт по шагам.</p>
+
+  <h3>Пример использования Notebook LM</h3>
+
+  <p>Задача: исследовать нишу инвестиций в AI-стартапы. Скажи Клоду:</p>
+
+  <pre><code>Зайди в Notebook LM, создай блокнот, залей туда 200 ресурсов по теме
+инвестиций в AI-стартапы и сделай мне выжимку.</code></pre>
+
+  <p>Выводы сохрани в Obsidian или Pinecone для дальнейшего использования.</p>
+
+  <hr>
+
+  <section class="callout callout-keys">
+    <h3>🔑 Ключевые мысли</h3>
+    <ol>
+      <li><strong>Одна база — один проект.</strong> Не вали всё в кучу. Один Jarvis для YouTube-канала, другой для клиентских кейсов, третий для инструментов. Каждый знает свою тему глубоко.</li>
+      <li><strong>Obsidian — это про логику, Pinecone — про память.</strong> Obsidian мыслит вместе с тобой, выстраивая связи. Pinecone запоминает факты. Это разные инструменты для разных задач.</li>
+      <li><strong>Не строй UI поверх базы.</strong> У тебя уже есть идеальный интерфейс — это Claude. Просто открывай папку проекта и общайся в терминале.</li>
+      <li><strong>Один раз собрал — работает всю жизнь.</strong> Каждая новая статья делает базу дороже. Система не стартует, она только растёт.</li>
+      <li><strong>Масштабируй заранее.</strong> Начинаешь с Obsidian, но строй с прицелом на Pinecone. Когда дорастёшь до 1000+ файлов, переводи архив на векторный поиск — не жди, пока разоришься на токенах.</li>
+    </ol>
+  </section>
+
+  <section class="callout callout-source">
+    <h3>🔗 Источник</h3>
+    <p><a href="https://youtu.be/eg5cWYK5Q04" target="_blank" rel="noopener">Claude Code + Obsidian ВЗОРВАЛИ Интернет (Метод Андрея Карпати)</a><br>
+    Канал: Мастодонт · 23 минуты</p>
+  </section>
+
+  <footer>
+    Гайд собран из видео · <a href="https://youtu.be/eg5cWYK5Q04" target="_blank" rel="noopener">открыть оригинал на YouTube</a>
+  </footer>
+</main>
+</body>
+</html>

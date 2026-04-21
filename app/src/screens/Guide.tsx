@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { loadCatalog, loadGuideContent } from '../catalog';
 import { getUser, openExternal } from '../telegram';
@@ -45,6 +45,37 @@ export function Guide() {
       document.documentElement.style.removeProperty('--wm-image');
     };
   }, []);
+
+  const articleRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const root = articleRef.current;
+    if (!root || content === null) return;
+
+    const handler = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement)?.closest('a') as HTMLAnchorElement | null;
+      if (!target) return;
+      const href = target.getAttribute('href') || '';
+      if (href.startsWith('#')) {
+        e.preventDefault();
+        const id = decodeURIComponent(href.slice(1));
+        if (!id) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
+        const el = root.querySelector(`#${CSS.escape(id)}, [name="${id}"]`) as HTMLElement | null;
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+      if (/^https?:\/\//i.test(href)) {
+        e.preventDefault();
+        openExternal(href);
+      }
+    };
+
+    root.addEventListener('click', handler);
+    return () => root.removeEventListener('click', handler);
+  }, [content]);
 
   if (error) return <div className="p-6 text-red-400">{error}</div>;
   if (!guide || content === null) return <div className="p-6 text-obsidian-dim">Загрузка…</div>;
@@ -94,6 +125,7 @@ export function Guide() {
       <div className="h-px bg-gradient-to-r from-transparent via-obsidian-border to-transparent mx-5" />
 
       <article
+        ref={articleRef}
         className="guide-content px-5 pt-6"
         dangerouslySetInnerHTML={{ __html: content }}
       />

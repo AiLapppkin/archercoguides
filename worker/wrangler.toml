@@ -18,12 +18,12 @@ RATE_LIMIT_PER_MINUTE = "10"
 [[d1_databases]]
 binding = "DB"
 database_name = "archercoguides-db"
-database_id = "REPLACE_WITH_D1_ID"
+database_id = "1d1cddce-d82a-46ec-83c4-fc2348cc31e4"
 
 # KV binding for rate limiting — id filled in after `wrangler kv namespace create RATE_LIMIT`
 [[kv_namespaces]]
 binding = "RATE_LIMIT"
-id = "REPLACE_WITH_KV_ID"
+id = "5494ffae867b4ba6ad379fbf4a2c52c0"
 
 # Secrets (set with `wrangler secret put`):
 #   BOT_TOKEN — Telegram bot token from @BotFather (required)

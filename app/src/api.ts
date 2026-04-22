@@ -72,3 +72,21 @@ export async function fetchPurchases(): Promise<
   }>('/api/me/purchases');
   return r.purchases;
 }
+
+export type AdminStats = {
+  totalUsers: number;
+  totalViews: number;
+  newUsersLast7d: number;
+  topGuides: Array<{ guide_id: string; view_count: number }>;
+  recentViews: Array<{
+    tg_id: number;
+    username: string | null;
+    first_name: string | null;
+    guide_id: string;
+    viewed_at: number;
+  }>;
+};
+
+export async function fetchAdminStats(): Promise<AdminStats> {
+  return req<AdminStats>('/api/admin/stats');
+}

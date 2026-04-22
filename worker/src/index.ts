@@ -22,15 +22,17 @@ type Ctx = Context<AppEnv>;
 
 const app = new Hono<AppEnv>();
 
-app.use('*', async (c, next) => {
-  const origin = c.env.ALLOWED_ORIGIN;
-  return cors({
-    origin: [origin, 'http://localhost:5173'],
-    allowHeaders: ['Content-Type', 'X-TG-Init-Data'],
-    allowMethods: ['GET', 'POST', 'OPTIONS'],
-    maxAge: 600,
-  })(c, next);
-});
+// CORS is intentionally permissive: all endpoints that mutate or read
+// user data require a valid HMAC-signed initData (see requireAuth). The
+// Origin header is not a security boundary here — Telegram WebViews on
+// iOS/desktop sometimes send `null` or unexpected origins, so echoing
+// the request origin is the pragmatic choice.
+app.use('*', cors({
+  origin: (origin) => origin || '*',
+  allowHeaders: ['Content-Type', 'X-TG-Init-Data'],
+  allowMethods: ['GET', 'POST', 'OPTIONS'],
+  maxAge: 600,
+}));
 
 app.get('/', (c) =>
   c.json({

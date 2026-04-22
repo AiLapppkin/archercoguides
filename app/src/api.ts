@@ -42,11 +42,16 @@ export async function fetchGuideContent(slug: string): Promise<string | null> {
   const wa = getWebApp();
   const initData = wa?.initData ?? '';
   if (!initData) return null;
-  const res = await fetch(`${API_BASE}/api/guides/${slug}/content`, {
-    headers: { 'X-TG-Init-Data': initData },
-  });
-  if (!res.ok) return null;
-  return await res.text();
+  try {
+    const res = await fetch(`${API_BASE}/api/guides/${slug}/content`, {
+      headers: { 'X-TG-Init-Data': initData },
+    });
+    if (!res.ok) return null;
+    return await res.text();
+  } catch (err) {
+    console.warn('[api] fetchGuideContent failed, falling back to Pages:', err);
+    return null;
+  }
 }
 
 export async function toggleFavoriteApi(slug: string): Promise<boolean> {

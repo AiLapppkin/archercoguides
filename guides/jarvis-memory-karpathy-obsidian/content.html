@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧠 Собрать Jarvis: долгосрочная память Claude Code на Obsidian</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0712; --bg-elev: #120d1f; --bg-card: #151024; --bg-deep: #070510;
+  --fg: #f0ebe0; --fg-dim: #a79fb0; --fg-faint: #6f6780;
+  --border: #241d37; --border-soft: #1a1428;
+  --amber: #e8c154; --amber-b: #ffd970;
+  --violet: #9d7cff; --violet-b: #b79aff;
+  --cyan: #50e3c2; --magenta: #ff6b9d;
+  --grad-brand: linear-gradient(135deg,#e8c154 0%,#d18cff 55%,#9d7cff 100%);
+  --grad-text: linear-gradient(92deg,#e8c154 0%,#f0ebe0 30%,#b79aff 65%,#9d7cff 100%);
+  --grad-line: linear-gradient(90deg,transparent 0%,#e8c154 25%,#9d7cff 75%,transparent 100%);
+  --glow-amber: 0 0 40px rgba(232,193,84,.22),0 0 80px rgba(232,193,84,.07);
+  --glow-violet: 0 0 40px rgba(157,124,255,.28),0 0 80px rgba(157,124,255,.09);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: 'Outfit', sans-serif; font-weight: 400; line-height: 1.65;
+  -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: hidden;
+}
+
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 10% 5%, rgba(232,193,84,.08) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 55% at 90% 90%, rgba(157,124,255,.12) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(80,227,194,.03) 0%, transparent 70%),
+    linear-gradient(180deg, transparent 60%, rgba(7,5,16,.7) 100%);
+  pointer-events: none; z-index: 0;
+}
+body::after {
+  content: ''; position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: .035; mix-blend-mode: overlay; pointer-events: none; z-index: 0;
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--amber), var(--violet));
+  border-radius: 10px; border: 2px solid var(--bg-deep);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(.78); opacity: .75; }
+}
+
+.fade-up { opacity: 0; transform: translateY(20px); }
+.fade-up.in {
+  opacity: 1; transform: translateY(0);
+  transition: opacity .7s cubic-bezier(.2,.9,.3,1), transform .7s cubic-bezier(.2,.9,.3,1);
+}
+
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(10,7,18,.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-soft); padding: 0 clamp(16px, 4vw, 48px);
+}
+.nav-inner {
+  max-width: 880px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 60px; gap: 16px;
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Unbounded', sans-serif; font-size: .82rem; font-weight: 700;
+  color: var(--fg); text-decoration: none;
+}
+.pulse-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 8px var(--amber), 0 0 18px rgba(232,193,84,.5);
+  animation: pulse 2s ease-in-out infinite; flex-shrink: 0;
+}
+.nav-tag {
+  font-family: 'JetBrains Mono', monospace; font-size: .66rem;
+  color: var(--fg-faint); letter-spacing: .14em; text-transform: uppercase;
+  background: rgba(157,124,255,.08); border: 1px solid rgba(157,124,255,.2);
+  border-radius: 999px; padding: 3px 10px;
+}
+
+main {
+  position: relative; z-index: 1;
+  max-width: 880px; margin: 0 auto;
+  padding: clamp(28px, 5vw, 56px) clamp(16px, 4vw, 40px) clamp(60px, 8vw, 96px);
+}
+
+.hero {
+  text-align: center; margin-bottom: clamp(36px, 5vw, 56px);
+  padding: clamp(24px, 4vw, 48px) 0 clamp(20px, 3vw, 32px);
+}
+.hero-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .7rem; font-weight: 500;
+  letter-spacing: .22em; text-transform: uppercase; color: var(--amber);
+  background: rgba(232,193,84,.08); border: 1px solid rgba(232,193,84,.18);
+  border-radius: 999px; padding: 5px 14px; margin-bottom: 22px;
+}
+.hero-label::before {
+  content: ''; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--amber); box-shadow: 0 0 6px var(--amber);
+  animation: pulse 2s ease-in-out infinite;
+}
+.hero h1 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(28px, 5.5vw, 56px);
+  font-weight: 700; line-height: 1.08; letter-spacing: -.02em;
+  background: var(--grad-text);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 16px;
+}
+.hero-icon {
+  font-size: clamp(40px, 6vw, 56px); display: block; margin-bottom: 12px;
+  filter: drop-shadow(0 0 18px rgba(232,193,84,.35));
+}
+.hero-sub {
+  font-size: clamp(.95rem, 1.8vw, 1.1rem); color: var(--fg-dim);
+  max-width: 620px; margin: 0 auto 24px; line-height: 1.65;
+}
+.hero-meta {
+  display: flex; justify-content: center; gap: 18px; flex-wrap: wrap;
+}
+.hero-meta-item {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'JetBrains Mono', monospace; font-size: .68rem;
+  color: var(--fg-faint); letter-spacing: .1em;
+}
+.hero-meta-item strong { color: var(--violet-b); font-weight: 500; }
+.hero-meta-item a { color: var(--amber); text-decoration: none; border-bottom: 1px dashed rgba(232,193,84,.3); }
+.hero-line {
+  height: 1px; background: var(--grad-line);
+  max-width: 420px; margin: 28px auto 0; opacity: .5;
+}
+
+.callout {
+  border-radius: 16px; border: 1px solid var(--border);
+  background: var(--bg-card);
+  padding: clamp(18px, 2.4vw, 26px);
+  margin: 24px 0; position: relative; overflow: hidden;
+}
+.callout::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--grad-brand); opacity: .55;
+}
+.callout h3 {
+  font-family: 'Unbounded', sans-serif;
+  margin: 0 0 12px; font-size: 1rem; font-weight: 600;
+  display: flex; align-items: center; gap: 10px;
+  color: var(--fg); letter-spacing: -.005em;
+}
+.callout h3 .emoji {
+  font-size: 1.3rem; filter: drop-shadow(0 0 6px rgba(232,193,84,.25));
+}
+.callout p, .callout li { font-size: .95rem; color: var(--fg-dim); line-height: 1.7; }
+.callout p:last-child, .callout ol:last-child, .callout ul:last-child { margin-bottom: 0; }
+.callout-intro::before { background: linear-gradient(90deg, var(--cyan), var(--amber)); }
+.callout-goals::before { background: linear-gradient(90deg, var(--cyan), var(--violet)); }
+.callout-keys::before { background: linear-gradient(90deg, var(--amber), var(--magenta)); }
+.callout-resources { background: linear-gradient(180deg, var(--bg-card) 0%, rgba(80,227,194,.03) 100%); }
+.callout-resources::before { background: linear-gradient(90deg, var(--cyan), var(--violet)); }
+.callout-source::before { background: linear-gradient(90deg, var(--violet), var(--amber)); }
+
+h2 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(1.2rem, 2.6vw, 1.55rem);
+  font-weight: 650; line-height: 1.2; letter-spacing: -.01em;
+  margin: clamp(36px, 5vw, 52px) 0 16px;
+  display: flex; align-items: baseline; gap: 14px;
+}
+h2 .step-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .78rem; font-weight: 600;
+  letter-spacing: .18em;
+  background: var(--grad-text);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  white-space: nowrap;
+}
+h3 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 1.05rem; font-weight: 600;
+  margin: 24px 0 10px; color: var(--fg);
+  letter-spacing: -.005em;
+}
+h4 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem; font-weight: 600;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--amber); margin: 18px 0 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+h4::before { content: '▸'; opacity: .7; }
+
+p { margin: 0 0 12px; color: var(--fg-dim); font-size: .95rem; line-height: 1.7; }
+strong { color: var(--fg); font-weight: 600; }
+em { color: var(--violet-b); font-style: normal; font-weight: 500; }
+a { color: var(--amber); text-decoration: none; border-bottom: 1px dashed rgba(232,193,84,.35); transition: border-color .18s, color .18s; word-break: break-word; }
+a:hover { color: var(--amber-b); border-bottom-color: var(--amber-b); }
+
+ol, ul { margin: 0 0 14px; padding-left: 22px; color: var(--fg-dim); font-size: .95rem; }
+ol li, ul li { margin: 8px 0; line-height: 1.65; }
+ul { list-style: none; padding-left: 0; }
+ul li { position: relative; padding-left: 22px; }
+ul li::before {
+  content: ''; position: absolute; left: 4px; top: 0.7em;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--amber);
+}
+ol { list-style: decimal; }
+ol::marker { color: var(--amber); }
+
+code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .85em;
+  background: rgba(232,193,84,.08);
+  border: 1px solid rgba(232,193,84,.2);
+  color: var(--amber-b);
+  padding: 1px 7px;
+  border-radius: 6px;
+}
+pre {
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  overflow-x: auto;
+  font-size: .82rem;
+  line-height: 1.6;
+  margin: 14px 0;
+  position: relative;
+}
+pre::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--amber), var(--violet), transparent);
+  opacity: .4;
+}
+pre code {
+  background: none; border: 0; padding: 0; color: var(--fg);
+  font-size: inherit;
+}
+
+.hero-thumb-wrap {
+  margin: 0 auto 32px; max-width: 720px;
+  border-radius: 18px; overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  position: relative;
+}
+.hero-thumb-wrap::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--grad-brand); opacity: .6; z-index: 2;
+}
+.hero-thumb {
+  display: block; width: 100%; height: auto; aspect-ratio: 16/9;
+  object-fit: cover; filter: saturate(1.05);
+}
+
+.prompt-block {
+  position: relative;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--violet);
+  border-radius: 12px;
+  padding: 16px 18px 18px;
+  margin: 16px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .82rem;
+  line-height: 1.65;
+  color: var(--fg);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-x: auto;
+}
+.prompt-block .prompt-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .6rem; font-weight: 600;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--violet-b);
+  background: rgba(157,124,255,.1);
+  border: 1px solid rgba(157,124,255,.22);
+  border-radius: 999px; padding: 3px 10px;
+  display: inline-block; margin-bottom: 10px;
+}
+
+.info-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px; margin: 16px 0;
+}
+.info-chip {
+  background: rgba(255,255,255,.02);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.info-chip-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .6rem; font-weight: 600;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--amber); margin-bottom: 4px;
+}
+.info-chip-text {
+  font-size: .84rem; color: var(--fg-dim); line-height: 1.5;
+}
+
+.tools-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px; margin: 16px 0 20px;
+}
+.tool-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  transition: border-color .2s, transform .2s, box-shadow .2s;
+  position: relative; overflow: hidden;
+}
+.tool-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--grad-brand); opacity: .4; transition: opacity .2s;
+}
+.tool-card:hover {
+  border-color: rgba(232,193,84,.3); transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(0,0,0,.35), var(--glow-amber);
+}
+.tool-card:hover::before { opacity: .8; }
+.tool-name {
+  font-family: 'Unbounded', sans-serif; font-weight: 600;
+  font-size: .95rem; color: var(--fg); margin-bottom: 4px;
+}
+.tool-cost {
+  font-family: 'JetBrains Mono', monospace; font-size: .62rem;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--cyan); margin-bottom: 8px;
+  background: rgba(80,227,194,.08); border: 1px solid rgba(80,227,194,.2);
+  border-radius: 999px; padding: 2px 8px; display: inline-block;
+}
+.tool-cost.paid { color: var(--magenta); background: rgba(255,107,157,.08); border-color: rgba(255,107,157,.2); }
+.tool-cost.freemium { color: var(--amber); background: rgba(232,193,84,.08); border-color: rgba(232,193,84,.2); }
+.tool-desc {
+  font-size: .78rem; color: var(--fg-faint); line-height: 1.55; margin-bottom: 8px;
+}
+.tool-link {
+  font-family: 'JetBrains Mono', monospace; font-size: .72rem;
+  color: var(--amber); word-break: break-all;
+  border-bottom: 1px dashed rgba(232,193,84,.3);
+}
+
+.links-list {
+  display: flex; flex-direction: column; gap: 6px;
+  margin: 14px 0;
+}
+.links-list li {
+  background: rgba(255,255,255,.02);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px;
+  padding-left: 14px !important;
+}
+.links-list li::before { display: none; }
+.links-list .link-label {
+  font-family: 'Unbounded', sans-serif; font-weight: 600;
+  font-size: .82rem; color: var(--fg);
+  min-width: 180px;
+}
+.links-list .link-url {
+  font-family: 'JetBrains Mono', monospace; font-size: .74rem;
+  color: var(--amber); border-bottom: 1px dashed rgba(232,193,84,.3);
+  word-break: break-all;
+}
+
+hr.soft {
+  border: 0; height: 1px;
+  background: var(--grad-line); opacity: .35;
+  margin: clamp(32px, 4vw, 48px) 0;
+}
+
+footer {
+  margin-top: 56px; padding-top: 24px;
+  border-top: 1px solid var(--border-soft);
+  color: var(--fg-faint); font-size: .78rem;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace; letter-spacing: .08em;
+}
+footer a { color: var(--fg-faint); border-bottom-color: rgba(111,103,128,.4); }
+
+@media (max-width: 640px) {
+  .info-grid, .tools-grid { grid-template-columns: 1fr; }
+  .links-list li { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .links-list .link-label { min-width: 0; }
+  h2 { flex-direction: column; align-items: flex-start; gap: 4px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#top" class="nav-brand">
+      <span class="pulse-dot"></span>
+      Jarvis Memory · Guide
+    </a>
+    <span class="nav-tag">метод Карпати</span>
+  </div>
+</nav>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="hero-label">YouTube → Гайд · 23 мин</div>
+    <span class="hero-icon">🧠</span>
+    <h1>Собрать Jarvis: долгосрочная память Claude Code на Obsidian</h1>
+    <p class="hero-sub">Настроить самообновляющуюся базу знаний по методу Андрея Карпати. Claude Code сам пишет и связывает заметки — ты открываешь Obsidian и видишь, что он запомнил.</p>
+    <div class="hero-meta">
+      <span class="hero-meta-item">◉ автор · <strong>Мастадонт</strong></span>
+      <span class="hero-meta-item">◉ основа · <strong>@karpathy Obsidian-RAG</strong></span>
+      <span class="hero-meta-item">◉ <a href="https://www.youtube.com/watch?v=eg5cWYK5Q04" target="_blank" rel="noopener">видео на YouTube ↗</a></span>
+    </div>
+    <div class="hero-line"></div>
+  </section>
+
+  <div class="hero-thumb-wrap fade-up">
+    <a href="https://www.youtube.com/watch?v=eg5cWYK5Q04" target="_blank" rel="noopener">
+      <img class="hero-thumb" src="https://img.youtube.com/vi/eg5cWYK5Q04/maxresdefault.jpg" alt="Claude Code + Obsidian — Метод Карпати">
+    </a>
+  </div>
+
+  <section class="callout callout-intro fade-up">
+    <h3><span class="emoji">💡</span> О чём этот гайд</h3>
+    <p>Видео объясняет систему <strong>Obsidian-RAG</strong> от Андрея Карпати: Claude Code ведёт локальную «Википедию» в папке Markdown-файлов — сам создаёт структуру, пишет заметки, связывает сущности и концепты. Ты получаешь ИИ-ассистента, который не забывает контекст и становится умнее с каждым диалогом. Видео собрало 18M просмотров за неделю.</p>
+  </section>
+
+  <section class="callout callout-goals fade-up">
+    <h3><span class="emoji">✅</span> Что ты освоишь</h3>
+    <ol>
+      <li>Как <strong>развернуть Jarvis-базу</strong> с нуля за 30 минут в связке Claude Code + Obsidian + Antigravity.</li>
+      <li>Как <strong>скормить первую статью</strong> и получить автоматически 10–15 взаимосвязанных wiki-страниц.</li>
+      <li>Как <strong>сохранять веб-страницы одной кнопкой</strong> через Obsidian Web Clipper в свой vault.</li>
+      <li>Как <strong>задавать Jarvis составные вопросы</strong> и получать синтез со ссылками на свои же источники.</li>
+      <li>Как <strong>понять потолок системы</strong> и когда включать Pinecone или NotebookLM вместо Obsidian.</li>
+    </ol>
+  </section>
+
+  <h2><span class="step-num">01 ▸</span> Установи Obsidian и Antigravity</h2>
+  <p>Скачай <a href="https://obsidian.md" target="_blank" rel="noopener">obsidian.md</a> под свою ОС и запусти. В настройках (⚙ внизу слева) → <strong>Appearance</strong> → включи <em>Dark Mode</em>. Окно оставь открытым — папку подключим позже.</p>
+  <p>Скачай <a href="https://antigravity.google/download" target="_blank" rel="noopener">Antigravity</a> — бесплатный IDE от Google в preview-доступе. Он нужен как среда, где живёт Claude Code и терминал рядом с файлами.</p>
+  <div class="info-grid">
+    <div class="info-chip">
+      <div class="info-chip-label">Совет на потом</div>
+      <div class="info-chip-text">В <code>Settings → Files &amp; Links</code> укажи default attachment folder <code>raw/assets/</code> — изображения со статей будут складываться туда.</div>
+    </div>
+    <div class="info-chip">
+      <div class="info-chip-label">Два окна</div>
+      <div class="info-chip-text">Работаешь одновременно в двух окнах: Antigravity (Claude пишет файлы) и Obsidian (визуальный просмотр + граф).</div>
+    </div>
+  </div>
+
+  <h2><span class="step-num">02 ▸</span> Создай папку Jarvis и запусти Claude Code</h2>
+  <ol>
+    <li>Создай пустую папку и назови её <code>Jarvis</code> (или своим ником).</li>
+    <li>В Antigravity: <code>File → Open Folder</code> → выбери папку.</li>
+    <li>Открой терминал: <code>Terminal → New Terminal</code> (или <code>Ctrl + `</code>).</li>
+    <li>Введи команду <code>claude</code> и нажми <code>Enter</code>.</li>
+    <li>При первом запуске пройди логин в браузере.</li>
+  </ol>
+
+  <h2><span class="step-num">03 ▸</span> Скорми Claude промпт Карпати</h2>
+  <p>Отправь Claude два промпта подряд. Первый — «обёртка» с просьбой создать каркас. Второй — полный промпт Карпати с описанием архитектуры.</p>
+
+  <h4>Промпт 1 — обёртка</h4>
+  <div class="prompt-block"><span class="prompt-tag">prompt 1 / 2</span>
+Привет! Я хочу, чтобы ты создал структуру папок по образцу, который я тебе сейчас скину. Если есть вопросы — задавай, но в целом просто следуй инструкции и создай каркас моей базы знаний. [вставь ниже полный текст Промпта 2]</div>
+
+  <h4>Промпт 2 — архитектура LLM wiki</h4>
+  <p>Полный промпт Карпати на русском — в <a href="#resources">разделе 📎 Доп материалы</a>, а также оригинал в его <a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f" target="_blank" rel="noopener">Gist</a>. Ключевые блоки промпта:</p>
+  <ul>
+    <li><strong>Три слоя памяти:</strong> raw sources → wiki (markdown) → schema (CLAUDE.md).</li>
+    <li><strong>Четыре операции:</strong> Ingest, Query, Lint, Maintenance.</li>
+    <li><strong>Эффект масштабирования:</strong> один источник затрагивает 10–15 страниц, Claude не устаёт их обновлять.</li>
+  </ul>
+
+  <p>Через 2–3 минуты Claude создаст каркас:</p>
+<pre><code>Jarvis/
+├── CLAUDE.md
+├── raw/
+│   ├── sources/
+│   ├── web-clipped/
+│   └── assets/
+└── wiki/
+    ├── entities/
+    ├── concepts/
+    ├── sources/
+    ├── synthesis/
+    ├── index.md
+    └── log.md</code></pre>
+
+  <h2><span class="step-num">04 ▸</span> Запусти Jarvis первой статьёй</h2>
+  <p>Дай Claude задачу — проскрапить статью и разложить её по wiki. Пример — разбор статьи с Хабра про 15 идей заработка в ИИ.</p>
+
+  <h4>Промпт 3 — первый ingest</h4>
+  <div class="prompt-block"><span class="prompt-tag">prompt 3 / 4</span>
+Чувак, хочу сделать wiki по заработку на нейросетях и AI-автоматизации. Назовём Jarvis — мой персональный ИИ-ассистент, который знает меня и помогает принимать лучшие решения про то, как зарабатывать на ИИ. Я буду кидать тебе статьи, кейсы, идеи, инструменты — и хочу, чтобы ты интегрировал всё это в структуру. Сначала — вот первый URL. Пройди по нему, скрапь весь контент (текст и картинки), разложи по raw/sources/ и сделай первую wiki-страницу в wiki/. URL: https://habr.com/ru/articles/990854/</div>
+  <p>Claude скачает текст и картинки, создаст страницы сущностей (Otli, Mogilko, Martel), концептов («value ladder», «retainer model», «awareness arbitrage»), обновит <code>index.md</code> и <code>log.md</code>.</p>
+
+  <h2><span class="step-num">05 ▸</span> Установи Obsidian Web Clipper</h2>
+  <p>Расширение сохраняет любую веб-страницу одной кнопкой прямо в твой vault — Claude потом её обработает.</p>
+  <ol>
+    <li>Поставь расширение из <a href="https://chromewebstore.google.com/detail/obsidian-web-clipper/cnjifjpddelmedmihgijeibhnjfabmlf" target="_blank" rel="noopener">Chrome Web Store</a>.</li>
+    <li>Кликни на иконку пазла 🧩 справа от адресной строки → закрепи <em>Obsidian Web Clipper</em> 📌.</li>
+    <li>Открой любую страницу → клик на фиолетовый ромб → шестерёнка ⚙ снизу → <code>Settings</code>.</li>
+    <li>В разделе <code>Vaults</code> введи имя своего vault точно как в Obsidian → <code>Enter</code>.</li>
+    <li>В разделе <code>Templates</code> → <code>New template</code>:
+      <ul>
+        <li>Name: <code>Jarvis</code></li>
+        <li>Note location: <code>raw/web-clipped/</code></li>
+        <li>Default storage vault: имя твоего vault</li>
+      </ul>
+    </li>
+  </ol>
+
+  <h2><span class="step-num">06 ▸</span> Подключи папку как vault в Obsidian</h2>
+  <ol>
+    <li>Вернись в Obsidian → внизу слева клик на имя vault → <code>Open folder as vault</code>.</li>
+    <li>Выбери папку <code>Jarvis</code> → <code>Open</code> → <code>Trust author</code> если спросит.</li>
+    <li>В левой панели увидишь: <code>CLAUDE.md</code>, <code>README.md</code>, <code>raw/</code>, <code>wiki/</code>.</li>
+    <li>Включи граф знаний: в левой панели иконка «круг с точками» → клик.</li>
+    <li>Потягай узлы — видно сеть связей между сущностями, концептами и источниками.</li>
+  </ol>
+
+  <h2><span class="step-num">07 ▸</span> Задай Jarvis первый вопрос</h2>
+  <p>Проверь, что система работает как синтезатор, а не как простой поиск. Claude должен сослаться на файлы, которые сам же и создал.</p>
+
+  <h4>Промпт 4 — составной вопрос</h4>
+  <div class="prompt-block"><span class="prompt-tag">prompt 4 / 4</span>
+Окей, проверим систему. На основе всего что ты про меня знаешь — профиль, wiki, концепты, статья с Хабра — ответь: я хочу в ближайшие 3 месяца вырасти на YouTube и параллельно начать продавать услуги студии через канал. Какие 3 конкретные стратегии из того что мы уже собрали в Jarvis я могу применить? Предложи сочетания — концепт плюс автор равно конкретное действие. И перечисли какие файлы из wiki ты использовал.</div>
+  <p>Claude создаст новый файл в <code>wiki/synthesis/</code>. На вопрос «какая стратегия сработала?» через месяц он обратится к этому же файлу — это и есть compound-эффект Jarvis.</p>
+
+  <h2><span class="step-num">08 ▸</span> Пойми ограничения системы</h2>
+  <p>У Obsidian-RAG есть жёсткий потолок — 99% блогеров про него молчат.</p>
+  <ul>
+    <li>Индекс растёт линейно — запросы дорожают с каждым новым источником.</li>
+    <li>Нет семантического поиска — Claude ищет по ключам, а не по смыслу.</li>
+    <li>Не справляется с архивами 10 000+ файлов — упрётся в контекст.</li>
+  </ul>
+
+  <h3>Формула «идеальной памяти» из четырёх слоёв</h3>
+  <div class="info-grid">
+    <div class="info-chip">
+      <div class="info-chip-label">Слой 1 · бейдж</div>
+      <div class="info-chip-text"><strong>CLAUDE.md</strong> — личность и правила. Меняется редко.</div>
+    </div>
+    <div class="info-chip">
+      <div class="info-chip-label">Слой 2 · мастерская</div>
+      <div class="info-chip-text"><strong>Obsidian</strong> — активное мышление, текущие проекты, идеи, связи.</div>
+    </div>
+    <div class="info-chip">
+      <div class="info-chip-label">Слой 3 · склад</div>
+      <div class="info-chip-text"><strong>Pinecone</strong> — архив транскриптов и больших статичных данных с векторным поиском.</div>
+    </div>
+    <div class="info-chip">
+      <div class="info-chip-label">Слой 4 · ресёрч</div>
+      <div class="info-chip-text"><strong>NotebookLM</strong> — глубокое исследование на 200+ источниках одновременно.</div>
+    </div>
+  </div>
+
+  <hr class="soft">
+
+  <section class="callout callout-resources fade-up" id="resources">
+    <h3><span class="emoji">📎</span> Доп материалы от автора</h3>
+    <p>Всё собрано на странице <a href="https://gomymy64.github.io/jarvis-memory/" target="_blank" rel="noopener">gomymy64.github.io/jarvis-memory</a> — там же бесплатный план Мастадонта по выходу на первые деньги в ИИ-2026 и условия розыгрыша 5× Claude Pro и 1× Claude Max. Ниже — выжимка по категориям.</p>
+
+    <h4>Инструменты (8 штук)</h4>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <div class="tool-name">Obsidian</div>
+        <span class="tool-cost">free</span>
+        <div class="tool-desc">Просмотрщик и редактор Markdown-заметок. База для Jarvis.</div>
+        <a class="tool-link" href="https://obsidian.md" target="_blank" rel="noopener">obsidian.md ↗</a>
+      </div>
+      <div class="tool-card">
+        <div class="tool-name">Antigravity</div>
+        <span class="tool-cost">free · preview</span>
+        <div class="tool-desc">IDE от Google. В нём живёт терминал с Claude Code.</div>
+        <a class="tool-link" href="https://antigravity.google" target="_blank" rel="noopener">antigravity.google ↗</a>
+      </div>
+      <div class="tool-card">
+        <div class="tool-name">Claude Code</div>
+        <span class="tool-cost paid">Pro / Max</span>
+        <div class="tool-desc">Агент, который пишет и обновляет заметки в папке Jarvis.</div>
+        <a class="tool-link" href="https://claude.com/product/claude-code" target="_blank" rel="noopener">claude.com/product/claude-code ↗</a>
+      </div>
+      <div class="tool-card">
+        <div class="tool-name">Obsidian Web Clipper</div>
+        <span class="tool-cost">free</span>
+        <div class="tool-desc">Сохраняет любую страницу в твой vault одной кнопкой.</div>
+        <a class="tool-link" href="https://obsidian.md/clipper" target="_blank" rel="noopener">obsidian.md/clipper ↗</a>
+      </div>
+      <div class="tool-card">
+        <div class="tool-name">Pinecone</div>
+        <span class="tool-cost freemium">freemium</span>
+        <div class="tool-desc">Векторная БД для «склада» — транскрипты и большие архивы.</div>
+        <a class="tool-link" href="https://pinecone.io" target="_blank" rel="noopener">pinecone.io ↗</a>
+      </div>
+      <div class="tool-card">
+        <div class="tool-name">NotebookLM</div>
+        <span class="tool-cost">free</span>
+        <div class="tool-desc">Deep Research от Google на 200+ источниках одновременно.</div>
+        <a class="tool-link" href="https://notebooklm.google.com" target="_blank" rel="noopener">notebooklm.google.com ↗</a>
+      </div>
+      <div class="tool-card">
+        <div class="tool-name">Karpathy Gist</div>
+        <span class="tool-cost">original</span>
+        <div class="tool-desc">Оригинальный промпт Карпати — исходник всей системы.</div>
+        <a class="tool-link" href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f" target="_blank" rel="noopener">gist.github.com/karpathy ↗</a>
+      </div>
+      <div class="tool-card">
+        <div class="tool-name">Статья на Хабре</div>
+        <span class="tool-cost">source</span>
+        <div class="tool-desc">«15 идей заработка в ИИ 2026» — первый источник для теста Jarvis.</div>
+        <a class="tool-link" href="https://habr.com/ru/articles/990854/" target="_blank" rel="noopener">habr.com/ru/articles/990854 ↗</a>
+      </div>
+    </div>
+
+    <h4>Полный список ссылок</h4>
+    <ul class="links-list">
+      <li><span class="link-label">Obsidian</span><a class="link-url" href="https://obsidian.md" target="_blank" rel="noopener">obsidian.md</a></li>
+      <li><span class="link-label">Antigravity IDE</span><a class="link-url" href="https://antigravity.google" target="_blank" rel="noopener">antigravity.google</a></li>
+      <li><span class="link-label">Antigravity Download</span><a class="link-url" href="https://antigravity.google/download" target="_blank" rel="noopener">antigravity.google/download</a></li>
+      <li><span class="link-label">Claude Code</span><a class="link-url" href="https://claude.com/product/claude-code" target="_blank" rel="noopener">claude.com/product/claude-code</a></li>
+      <li><span class="link-label">Web Clipper · Chrome Store</span><a class="link-url" href="https://chromewebstore.google.com/detail/obsidian-web-clipper/cnjifjpddelmedmihgijeibhnjfabmlf" target="_blank" rel="noopener">chromewebstore.google.com/…</a></li>
+      <li><span class="link-label">Web Clipper · Official</span><a class="link-url" href="https://obsidian.md/clipper" target="_blank" rel="noopener">obsidian.md/clipper</a></li>
+      <li><span class="link-label">Karpathy Gist</span><a class="link-url" href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f" target="_blank" rel="noopener">gist.github.com/karpathy/442a6bf555914893e9891c11519de94f</a></li>
+      <li><span class="link-label">Karpathy Tweet</span><a class="link-url" href="https://x.com/karpathy/status/2039805659525644595" target="_blank" rel="noopener">x.com/karpathy/status/…</a></li>
+      <li><span class="link-label">Habr статья</span><a class="link-url" href="https://habr.com/ru/articles/990854/" target="_blank" rel="noopener">habr.com/ru/articles/990854</a></li>
+      <li><span class="link-label">Pinecone</span><a class="link-url" href="https://pinecone.io" target="_blank" rel="noopener">pinecone.io</a></li>
+      <li><span class="link-label">NotebookLM</span><a class="link-url" href="https://notebooklm.google.com" target="_blank" rel="noopener">notebooklm.google.com</a></li>
+      <li><span class="link-label">NotebookLM · видео</span><a class="link-url" href="https://www.youtube.com/watch?v=vXx8RE0sxXE" target="_blank" rel="noopener">youtube.com/watch?v=vXx8RE0sxXE</a></li>
+      <li><span class="link-label">Страница с материалами</span><a class="link-url" href="https://gomymy64.github.io/jarvis-memory/" target="_blank" rel="noopener">gomymy64.github.io/jarvis-memory</a></li>
+      <li><span class="link-label">Бесплатный план (Telegram-бот)</span><a class="link-url" href="https://t.me/mastodont_aibot?start=agency" target="_blank" rel="noopener">t.me/mastodont_aibot?start=agency</a></li>
+    </ul>
+
+    <h4>Три слоя архитектуры из промпта Карпати</h4>
+    <ol>
+      <li><strong>Raw sources</strong> — неизменная коллекция: статьи, PDF, картинки, данные.</li>
+      <li><strong>Wiki</strong> — генерируемые markdown-файлы: summaries, страницы сущностей, концепты, сравнения, синтез.</li>
+      <li><strong>Schema</strong> — <code>CLAUDE.md</code>: структура, соглашения, workflows.</li>
+    </ol>
+
+    <h4>Четыре операции Jarvis</h4>
+    <ul>
+      <li><strong>Ingest</strong> — новый источник → прочитать → обсудить → summary → обновить индекс, сущности, концепты, лог (1 источник = 10–15 страниц).</li>
+      <li><strong>Query</strong> — вопрос → найти релевантные страницы → прочитать → синтезировать с цитатами → сохранить в <code>wiki/synthesis/</code>.</li>
+      <li><strong>Lint</strong> — health-check: противоречия, устаревшие факты, страницы-сироты, недостающие концепты, битые ссылки.</li>
+      <li><strong>Maintenance</strong> — Claude обновляет файлы, человек курирует источники и задаёт вопросы.</li>
+    </ul>
+  </section>
+
+  <section class="callout callout-keys fade-up">
+    <h3><span class="emoji">🔑</span> Ключевые мысли</h3>
+    <ol>
+      <li><strong>Claude Code не устаёт поддерживать wiki.</strong> Люди бросают личные базы, потому что maintenance растёт быстрее ценности. Claude касается 15 файлов за один проход — система остаётся живой.</li>
+      <li><strong>Один источник → десятки связей.</strong> Ingest обновляет не только summary, но и страницы сущностей, концептов, индекс и лог. Compound-эффект на каждом новом источнике.</li>
+      <li><strong>Obsidian — это мастерская, а не архив.</strong> Для 10k+ файлов нужен Pinecone. Для глубокого ресёрча — NotebookLM. Jarvis — только активное мышление и проекты.</li>
+      <li><strong>Плоские Markdown-файлы — ключ.</strong> Claude легко читает, редактирует и связывает их. Ты видишь всё глазами в Obsidian. Формат побеждает любую хитрую БД для активной работы.</li>
+      <li><strong>CLAUDE.md — это закон системы.</strong> Там описаны структура, правила именования, workflow. Claude сверяется с ним при каждом действии и сам не ломает инвариант.</li>
+    </ol>
+  </section>
+
+  <section class="callout callout-source fade-up">
+    <h3><span class="emoji">🔗</span> Источник</h3>
+    <p><strong>Видео:</strong> <a href="https://www.youtube.com/watch?v=eg5cWYK5Q04" target="_blank" rel="noopener">«Claude Code + Obsidian ВЗОРВАЛИ Интернет (Метод Андрея Карпати)»</a></p>
+    <p><strong>Канал:</strong> Мастадонт (@aiBoomb) · <strong>Длительность:</strong> 23 минуты</p>
+    <p><strong>Первоисточник идеи:</strong> <a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f" target="_blank" rel="noopener">Gist Андрея Карпати</a> · <a href="https://x.com/karpathy/status/2039805659525644595" target="_blank" rel="noopener">его твит</a> (18M просмотров).</p>
+    <p><strong>Материалы к уроку:</strong> <a href="https://gomymy64.github.io/jarvis-memory/" target="_blank" rel="noopener">gomymy64.github.io/jarvis-memory</a> — все шаги, ссылки и промпты в одном месте.</p>
+  </section>
+
+  <footer>
+    Гайд собран из видео · <a href="https://www.youtube.com/watch?v=eg5cWYK5Q04" target="_blank" rel="noopener">открыть оригинал</a>
+  </footer>
+
+</main>
+
+<script>
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

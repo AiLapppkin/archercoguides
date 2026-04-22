@@ -1,0 +1,14 @@
+{
+  "id": "jarvis-memory-karpathy-obsidian",
+  "slug": "jarvis-memory-karpathy-obsidian",
+  "title": "Собрать Jarvis: долгосрочная память Claude Code на Obsidian",
+  "description": "Настроить самообновляющуюся базу знаний Jarvis на Obsidian по методу Карпати — Claude Code сам пишет, связывает и обновляет заметки.",
+  "category": "claude-code",
+  "tags": ["claude-code", "obsidian", "memory", "karpathy", "knowledge-base"],
+  "youtubeUrl": "https://www.youtube.com/watch?v=eg5cWYK5Q04",
+  "isPaid": false,
+  "priceStars": 0,
+  "duration": "15 мин чтения",
+  "publishedAt": "2026-04-22",
+  "coverUrl": ""
+}

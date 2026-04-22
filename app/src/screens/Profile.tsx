@@ -47,13 +47,16 @@ function AdminPanel() {
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [tick, setTick] = useState(0);
 
   useEffect(() => {
+    setLoading(true);
+    setError(null);
     fetchAdminStats()
       .then(setStats)
       .catch((e) => setError(String(e)))
       .finally(() => setLoading(false));
-  }, []);
+  }, [tick]);
 
   return (
     <section className="space-y-3">
@@ -68,8 +71,14 @@ function AdminPanel() {
       )}
 
       {error && (
-        <div className="bg-obsidian-card border border-red-800 rounded-xl p-4 text-red-400 text-sm font-mono">
-          {error}
+        <div className="bg-obsidian-card border border-red-800 rounded-xl p-4 space-y-2">
+          <div className="text-red-400 text-[12px] font-mono break-all">{error}</div>
+          <button
+            onClick={() => setTick((t) => t + 1)}
+            className="text-[12px] text-gold border border-gold/30 rounded-lg px-3 py-1"
+          >
+            Повторить
+          </button>
         </div>
       )}
 

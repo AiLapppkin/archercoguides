@@ -44,6 +44,7 @@ export function Profile() {
 }
 
 function AdminPanel() {
+  const [retryCount, setRetryCount] = useState(0);
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -53,7 +54,10 @@ function AdminPanel() {
     setLoading(true);
     setError(null);
     fetchAdminStats()
-      .then(setStats)
+      .then((data) => {
+        if (data === null) setError('initData недоступен — открой через Telegram');
+        else setStats(data);
+      })
       .catch((e) => setError(String(e)))
       .finally(() => setLoading(false));
   }, [tick]);
@@ -74,10 +78,12 @@ function AdminPanel() {
         <div className="bg-obsidian-card border border-red-800 rounded-xl p-4 space-y-2">
           <div className="text-red-400 text-[12px] font-mono break-all">{error}</div>
           <button
-            onClick={() => setTick((t) => t + 1)}
-            className="text-[12px] text-gold border border-gold/30 rounded-lg px-3 py-1"
+            onClick={() => { setRetryCount((n) => n + 1); setTick((t) => t + 1); }}
+            style={{ touchAction: 'manipulation' }}
+            className="text-[12px] text-gold rounded-lg px-3 py-1 active:opacity-60"
+            type="button"
           >
-            Повторить
+            Повторить {retryCount > 0 ? `(${retryCount})` : ''}
           </button>
         </div>
       )}

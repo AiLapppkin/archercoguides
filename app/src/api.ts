@@ -87,6 +87,20 @@ export type AdminStats = {
   }>;
 };
 
-export async function fetchAdminStats(): Promise<AdminStats> {
-  return req<AdminStats>('/api/admin/stats');
+export async function fetchAdminStats(): Promise<AdminStats | null> {
+  if (!API_BASE) return null;
+  const wa = getWebApp();
+  const initData = wa?.initData ?? '';
+  if (!initData) return null;
+  try {
+    const url = `${API_BASE}/api/admin/stats?_init_data=${encodeURIComponent(initData)}`;
+    const res = await fetch(url);
+    if (!res.ok) {
+      const body = await res.text().catch(() => '');
+      throw new Error(`${res.status}: ${body}`);
+    }
+    return (await res.json()) as AdminStats;
+  } catch (err) {
+    throw err;
+  }
 }

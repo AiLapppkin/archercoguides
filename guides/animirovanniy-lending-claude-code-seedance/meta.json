@@ -1,0 +1,14 @@
+{
+  "id": "animirovanniy-lending-claude-code-seedance",
+  "slug": "animirovanniy-lending-claude-code-seedance",
+  "title": "Собрать анимированный лендинг из Figma с Claude Code и Seedance 2.0",
+  "description": "Пошаговый workflow: дизайн из Figma → сайт через Claude Code → AI-персонажи через Nano Banana → анимация через Seedance 2.0 → деплой на Cloudflare.",
+  "category": "claude-code",
+  "tags": ["claude-code", "figma", "ai-video", "seedance", "web"],
+  "youtubeUrl": "https://youtu.be/F2OpUJsf68g",
+  "isPaid": false,
+  "priceStars": 0,
+  "duration": "10 мин чтения",
+  "publishedAt": "2026-04-21",
+  "coverUrl": ""
+}

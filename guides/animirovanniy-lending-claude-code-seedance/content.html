@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Собрать анимированный лендинг из Figma с Claude Code и Seedance 2.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&family=Onest:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#0a0a0f; --card:#12121a; --border:#1e1e2e;
+      --text:#e4e4ef; --dim:#8888a0;
+      --gold:#fbbf24; --gold-bright:#fde047; --gold-deep:#d97706;
+      --purple:#7c3aed;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Onest',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding:2rem 1.25rem;max-width:800px;margin:0 auto}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:99;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
+    h1,h2,h3,h4{font-family:'Unbounded',sans-serif;font-weight:700;letter-spacing:-.01em;margin:1.75em 0 .5em;line-height:1.25}
+    h1{font-size:2rem;background:linear-gradient(135deg,var(--gold-bright),var(--gold-deep));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-top:0}
+    h2{font-size:1.4rem}
+    h3{font-size:1.1rem;color:var(--gold-bright)}
+    h4{font-size:.95rem;color:var(--gold)}
+    p{margin:.9em 0;color:var(--dim)}
+    strong{color:var(--text);font-weight:600}
+    em{color:var(--gold-bright);font-style:normal;font-weight:500}
+    ul,ol{margin:1em 0;padding-left:1.5em;color:var(--dim)}
+    li{margin:.4em 0}
+    li::marker{color:var(--gold)}
+    a{color:var(--gold);text-decoration:none;border-bottom:1px dashed rgba(251,191,36,.35)}
+    a:hover{border-bottom-color:var(--gold)}
+    code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:rgba(251,191,36,.08);color:var(--gold-bright);padding:.15em .4em;border-radius:5px;border:1px solid rgba(251,191,36,.15)}
+    pre{background:#0d0d18;border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;overflow-x:auto;margin:1.25rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.75}
+    pre code{background:transparent;border:none;padding:0;font-size:inherit}
+    blockquote{border-left:3px solid var(--gold);background:rgba(251,191,36,.04);padding:1rem 1.25rem;margin:1.25rem 0;border-radius:0 10px 10px 0;color:var(--dim)}
+    .callout{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;margin:1rem 0}
+    .callout-intro,.callout-tip{border-left:3px solid var(--gold)}
+    .callout-source{border-left:3px solid var(--purple)}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;margin:1rem 0}
+    .card.highlight{border-left:3px solid var(--gold)}
+    .card.warn{border-left:3px solid #f59e0b}
+    .tag{display:inline-block;padding:.2rem .6rem;border-radius:6px;font-size:.72rem;font-weight:600;font-family:'Unbounded',sans-serif;background:rgba(251,191,36,.1);color:var(--gold-bright);border:1px solid rgba(251,191,36,.25);margin-right:.25rem}
+    hr{border:none;height:1px;background:var(--border);margin:2.5rem 0}
+    img{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--border);margin:1rem 0}
+  </style>
+</head>
+<body>
+  <h1>Собрать анимированный лендинг из Figma с Claude Code и Seedance 2.0</h1>
+
+  <section class="callout callout-intro">
+    <h3>💡 О чём этот гайд</h3>
+    <p>Собрать рабочий анимированный лендинг за 10 минут с помощью Claude Code, Higgs Field и Seedance 2.0 — от дизайна в Figma до деплоя на Cloudflare.</p>
+  </section>
+
+  <section class="callout callout-tip">
+    <h3>✅ Что ты освоишь</h3>
+    <ol>
+      <li>Передавать дизайн из Figma в Claude Code (MCP или скриншот + промпт)</li>
+      <li>Переходить из desktop-приложения в терминал для точечных правок</li>
+      <li>Генерировать персонажей и видео в Higgs Field через Nano Banana и Seedance 2.0</li>
+      <li>Убирать белый фон у AI-видео без видеоредактора</li>
+      <li>Сжимать медиа одной командой Claude и пушить сайт на Cloudflare</li>
+    </ol>
+  </section>
+
+  <hr>
+
+  <h2>1. Передай дизайн в Claude</h2>
+  <p>Открой Figma и выбери макет. Есть два пути:</p>
+  <ul>
+    <li><strong>С подпиской Figma.</strong> Переключись в <em>Dev Mode</em> → найди блок <code>MCP</code> → скопируй example prompt. Claude получит структуру компонентов напрямую.</li>
+    <li><strong>Без подписки.</strong> Сделай скриншот макета, перетащи в Claude Desktop, добавь промпт:
+<pre><code>Make this into a full-screen hero section of website.
+The font is Manrope. The H1 is 80 pixel size.</code></pre>
+    </li>
+  </ul>
+  <p>Выбери модель <strong>Opus 4.6</strong> и запусти. Claude соберёт базовый HTML и CSS. Даже там где в макете нет готовых иконок — сгенерирует похожие.</p>
+
+  <h2>2. Перейди в терминал</h2>
+  <p>Desktop-версия Claude хороша для стартовой генерации. Для точечных правок попроси её:</p>
+<pre><code>I want to continue this with Claude in the terminal. How do I do that?</code></pre>
+  <p>Claude выдаст команды для запуска Claude Code CLI. После этого сайт на одной половине экрана, Claude Code — на другой. Дальше всё через короткие естественно-языковые правки:</p>
+  <div class="card highlight">
+    <h4>Примеры микро-правок</h4>
+    <ul>
+      <li>«The H1 should be regular and semi-bold weight»</li>
+      <li>«The star icon at the end of the 3D magic is not shown correctly»</li>
+    </ul>
+  </div>
+
+  <h2>3. Подключи SVG-ассеты</h2>
+  <p>Экспортируй фон-сетку из Figma как <code>grid.svg</code> в папку <code>images/</code>. В Claude Code:</p>
+<pre><code>Add the grid.svg that's in the images folder to the full-screen background.
+It should sit behind everything, filling the entire page.</code></pre>
+  <p>Сетка растянется до краёв. Чтобы края не конкурировали с навигацией, добавь виньетку:</p>
+<pre><code>Add a radial mask to this to create a vignette mask. Tighten it up a bit.</code></pre>
+  <p>Аналогично подключи <code>logo.svg</code>, <code>button.svg</code>, <code>star.svg</code> одной командой: «Replace our logo with logo.svg in images, the button icon with button.svg, the star icon with star.svg».</p>
+
+  <h2>4. Сгенерируй персонажей в Higgs Field</h2>
+  <p>Открой <strong>Higgs Field</strong> → <strong>Nano Banana 2</strong>. Промпт:</p>
+<pre><code>Create a Pixar style character on a white background.
+He should be similar style to character from "Up".
+He has a miner's helmet on and a knitted jumper.</code></pre>
+  <p>Запускай параллельно на Nano Banana 2 и Nano Banana Pro — получишь разные вариации. Через несколько итераций подбери двух устойчивых персонажей.</p>
+  <div class="card">
+    <h4>Встроить в макет</h4>
+    <p>Экспортируй PNG в папку <code>images/</code>. В Claude Code:</p>
+<pre><code>I want to add the two character.png images into the design.
+Position them like this.</code></pre>
+    <p>Прикрепи скриншот с финальным расположением.</p>
+  </div>
+
+  <h2>5. Анимируй через Seedance 2.0</h2>
+  <p>В Higgs Field переключись в <strong>Video → Seedance 2.0</strong>. Загрузи PNG персонажа и дай промпт:</p>
+<pre><code>This character is on a solid white background. He's looking around.
+Static camera positioning. No panning.</code></pre>
+  <p>Seedance 2.0 держит камеру статичной и не обрезает персонажа по краям. Это критично для hero-секции: движущаяся камера ломает композицию. Скачай MP4 для обоих персонажей, положи в <code>images/</code> и скажи Claude:</p>
+<pre><code>Let's replace the images with their appropriate video in the images folder.</code></pre>
+
+  <h2>6. Убери белый фон без видеоредактора</h2>
+  <p>Если фон сгенерированного видео не идеально белый, персонаж «поплывёт» поверх grid-сетки. Два способа:</p>
+  <div class="card warn">
+    <h4>Быстрый — CSS blend mode</h4>
+<pre><code>Make the blend mode `darken` on the videos.</code></pre>
+    <p>Darken выбивает белые пиксели, визуально делая видео прозрачным. Работает для 90% кейсов.</p>
+  </div>
+  <div class="card">
+    <h4>Аккуратный — DaVinci Magic Mask</h4>
+    <ol>
+      <li>Перетащи видео в <strong>DaVinci Resolve</strong></li>
+      <li>Включи <strong>Magic Mask</strong> и грубо обведи персонажа</li>
+      <li>Run — получишь изолированный альфа-канал</li>
+      <li>Подложи белый фон и экспортируй</li>
+    </ol>
+  </div>
+
+  <h2>7. Сожми видео прямо из Claude</h2>
+  <p>Два MP4 в hero-секции делают страницу тяжёлой. В терминале:</p>
+<pre><code>Can we compress the videos?</code></pre>
+  <p>Claude вызовет <code>ffmpeg</code> с правильными параметрами. В видео <code>character1.mp4</code> падает с 6 МБ до 650 КБ. Потеря качества минимальна.</p>
+
+  <h2>8. Добавь CSS-анимации</h2>
+  <p>Одним промптом:</p>
+<pre><code>Let's have the grid come on the screen first, grow in,
+the H1 appearing one word at a time.</code></pre>
+  <p>Claude добавит <code>@keyframes</code> и выстроит <code>animation-delay</code>. На обновлении страницы — сетка вырастает, заголовок печатается по словам.</p>
+
+  <h2>9. Сделай адаптив</h2>
+<pre><code>Let's make it responsive. Nav links should turn into a burger icon,
+show full-screen nav pop-up with a cross at the top.
+Hide the characters on mobile. Have the login button full width.</code></pre>
+  <p>Claude сам разведёт медиа-запросы, напишет JS для бургера, скроет тяжёлые видео на узких экранах и растянет CTA по ширине.</p>
+
+  <h2>10. Задеплой на Cloudflare</h2>
+  <p>Последний промпт:</p>
+<pre><code>Let's push this to a GitHub repo, then show me the steps of
+publishing this live on Cloudflare.</code></pre>
+  <p>Claude создаст репозиторий через <code>gh</code>, запушит код и продиктует шаги для Cloudflare Pages. Подключение домена — в настройках Cloudflare за 5 минут. Хостинг для большинства случаев — бесплатный.</p>
+
+  <hr>
+
+  <section class="callout callout-tip">
+    <h3>🔑 Ключевые мысли</h3>
+    <ol>
+      <li>Desktop-Claude — быстрый старт генерации, Claude Code в терминале — точечные правки. Переход занимает один промпт.</li>
+      <li>Seedance 2.0 — единственный видео-генератор, которому можно приказать «static camera, no panning» и получить именно это. Для hero-секции с персонажами критично.</li>
+      <li>Blend mode <code>darken</code> убивает белый фон у AI-видео без видеоредактора. Быстрее DaVinci в 90% кейсов.</li>
+      <li>Claude Code умеет сам сжимать медиа. Ffmpeg вручную не нужен — уменьшение в 10× без заметной потери качества.</li>
+      <li>Полный путь «дизайн → задеплоенный сайт» занимает 10 минут активной работы плюс время на рендер AI-видео.</li>
+    </ol>
+  </section>
+
+  <section class="callout callout-source">
+    <h3>🔗 Источник</h3>
+    <p>Видео: <a href="https://youtu.be/F2OpUJsf68g" target="_blank" rel="noopener">Claude Code + Seedance 2.0 = Insane Websites</a> · 8 минут</p>
+  </section>
+</body>
+</html>

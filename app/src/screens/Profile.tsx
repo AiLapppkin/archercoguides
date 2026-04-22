@@ -29,16 +29,8 @@ export function Profile() {
         </div>
       </section>
 
-      <Placeholder
-        icon="⭐"
-        title="Купленные гайды"
-        text="Доступно после интеграции Telegram Stars (Phase 3)."
-      />
-      <Placeholder
-        icon="📖"
-        title="История просмотров"
-        text="Появится после подключения бэкенда (Phase 2)."
-      />
+      <Placeholder icon="⭐" title="Купленные гайды" text="Скоро." />
+      <Placeholder icon="📖" title="История просмотров" text="Скоро." />
       <Placeholder icon="❤️" title="Избранное" text="Скоро." />
     </div>
   );

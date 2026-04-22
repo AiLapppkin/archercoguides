@@ -5,6 +5,7 @@ dist/
 .env
 .env.local
 app/public/catalog.json
+app/public/admin-stats.json
 app/public/guides/
 app/tsconfig.tsbuildinfo
 .claude/

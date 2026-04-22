@@ -85,20 +85,16 @@ export type AdminStats = {
     guide_id: string;
     viewed_at: number;
   }>;
+  updatedAt?: number;
 };
 
-export async function fetchAdminStats(): Promise<AdminStats | null> {
-  if (!API_BASE) throw new Error(`API_BASE not set (VITE_API_BASE env missing)`);
+export async function fetchAdminStats(): Promise<AdminStats> {
+  if (!API_BASE) throw new Error('API не настроен');
   const wa = getWebApp();
   const initData = wa?.initData ?? '';
-  if (!initData) return null;
+  if (!initData) throw new Error('Открой через Telegram');
   const url = `${API_BASE}/api/admin/stats?_init_data=${encodeURIComponent(initData)}`;
-  let res: Response;
-  try {
-    res = await fetch(url);
-  } catch (err) {
-    throw new Error(`fetch failed [${url.slice(0, 60)}]: ${String(err)}`);
-  }
+  const res = await fetch(url);
   if (!res.ok) {
     const body = await res.text().catch(() => '');
     throw new Error(`${res.status}: ${body}`);

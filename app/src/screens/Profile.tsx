@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { getUser } from '../telegram';
 import { fetchAdminStats, type AdminStats } from '../api';
 
+
+
 const ADMIN_TG_ID = 161799016;
 
 export function Profile() {
@@ -44,7 +46,6 @@ export function Profile() {
 }
 
 function AdminPanel() {
-  const [retryCount, setRetryCount] = useState(0);
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -54,10 +55,7 @@ function AdminPanel() {
     setLoading(true);
     setError(null);
     fetchAdminStats()
-      .then((data) => {
-        if (data === null) setError('initData недоступен — открой через Telegram');
-        else setStats(data);
-      })
+      .then(setStats)
       .catch((e) => setError(String(e)))
       .finally(() => setLoading(false));
   }, [tick]);
@@ -78,18 +76,23 @@ function AdminPanel() {
         <div className="bg-obsidian-card border border-red-800 rounded-xl p-4 space-y-2">
           <div className="text-red-400 text-[12px] font-mono break-all">{error}</div>
           <button
-            onClick={() => { setRetryCount((n) => n + 1); setTick((t) => t + 1); }}
+            onClick={() => setTick((t) => t + 1)}
             style={{ touchAction: 'manipulation' }}
             className="text-[12px] text-gold rounded-lg px-3 py-1 active:opacity-60"
             type="button"
           >
-            Повторить {retryCount > 0 ? `(${retryCount})` : ''}
+            Повторить
           </button>
         </div>
       )}
 
       {stats && (
         <>
+          {stats.updatedAt && (
+            <div className="text-obsidian-dim text-[11px] font-mono px-1">
+              обновлено {formatTime(stats.updatedAt)}
+            </div>
+          )}
           {/* Stat cards */}
           <div className="grid grid-cols-3 gap-2">
             <StatCard label="Пользователей" value={stats.totalUsers} />

@@ -191,8 +191,10 @@ type BroadcastBody = {
 };
 
 function buildMiniappUrl(env: Env, slug: string): string {
-  const startParam = `guide_${slug.replace(/[^a-z0-9_-]/gi, '')}`;
-  return `https://t.me/${env.BOT_USERNAME}/${env.MINIAPP_NAME}?startapp=${startParam}`;
+  // Direct miniapp URL with ?guide=<slug> — used for inline web_app buttons,
+  // which open the miniapp inside Telegram without requiring a named webapp.
+  const safeSlug = slug.replace(/[^a-z0-9_-]/gi, '');
+  return `${env.GUIDES_ORIGIN.replace(/\/$/, '')}/?guide=${safeSlug}`;
 }
 
 function buildCaption(title: string, teaser: string): string {
@@ -280,8 +282,10 @@ async function runBroadcast(env: Env, broadcastId: number): Promise<void> {
 
     const miniappUrl = buildMiniappUrl(env, row.guide_id);
     const caption = buildCaption(row.title, row.teaser);
+    // web_app button opens the miniapp directly inside Telegram (only works
+    // in private chats with the bot — which is exactly the broadcast case).
     const replyMarkup = {
-      inline_keyboard: [[{ text: row.button_text, url: miniappUrl }]],
+      inline_keyboard: [[{ text: row.button_text, web_app: { url: miniappUrl } }]],
     };
 
     // Throttle to ~25 msg/sec — Telegram global cap is ~30/sec.

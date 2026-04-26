@@ -12,13 +12,8 @@ export default function App() {
   const navigate = useNavigate();
   useEffect(() => {
     initWebApp();
-    const param = getStartParam();
-    if (param && param.startsWith('guide_')) {
-      const slug = param.slice('guide_'.length);
-      if (/^[a-z0-9-]+$/i.test(slug)) {
-        navigate(`/guide/${slug}`, { replace: true });
-      }
-    }
+    const slug = resolveDeepLinkSlug();
+    if (slug) navigate(`/guide/${slug}`, { replace: true });
   }, [navigate]);
 
   return (
@@ -37,4 +32,20 @@ export default function App() {
       </main>
     </div>
   );
+}
+
+// Resolve a guide slug from either the Telegram start_param (when launched
+// via t.me deep link) or the ?guide=<slug> query parameter (when launched
+// from a web_app inline button on a broadcast). Returns null if neither
+// applies or if the slug fails the safelist check.
+function resolveDeepLinkSlug(): string | null {
+  const start = getStartParam();
+  if (start && start.startsWith('guide_')) {
+    const slug = start.slice('guide_'.length);
+    if (/^[a-z0-9-]+$/i.test(slug)) return slug;
+  }
+  const params = new URLSearchParams(window.location.search);
+  const q = params.get('guide');
+  if (q && /^[a-z0-9-]+$/i.test(q)) return q;
+  return null;
 }

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ранжироваться в ChatGPT и заменить SEO-команду агентами</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&family=Onest:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#0a0a0f; --card:#12121a; --border:#1e1e2e;
+      --text:#e4e4ef; --dim:#8888a0;
+      --gold:#fbbf24; --gold-bright:#fde047; --gold-deep:#d97706;
+      --purple:#7c3aed;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Onest',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding:2rem 1.25rem;max-width:800px;margin:0 auto}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:99;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
+    h1,h2,h3,h4{font-family:'Unbounded',sans-serif;font-weight:700;letter-spacing:-.01em;margin:1.75em 0 .5em;line-height:1.25}
+    h1{font-size:2rem;background:linear-gradient(135deg,var(--gold-bright),var(--gold-deep));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-top:0}
+    h2{font-size:1.4rem}
+    h3{font-size:1.1rem;color:var(--gold-bright)}
+    h4{font-size:.95rem;color:var(--gold)}
+    p{margin:.9em 0;color:var(--dim)}
+    strong{color:var(--text);font-weight:600}
+    em{color:var(--gold-bright);font-style:normal;font-weight:500}
+    ul,ol{margin:1em 0;padding-left:1.5em;color:var(--dim)}
+    li{margin:.4em 0}
+    li::marker{color:var(--gold)}
+    a{color:var(--gold);text-decoration:none;border-bottom:1px dashed rgba(251,191,36,.35)}
+    a:hover{border-bottom-color:var(--gold)}
+    code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:rgba(251,191,36,.08);color:var(--gold-bright);padding:.15em .4em;border-radius:5px;border:1px solid rgba(251,191,36,.15)}
+    pre{background:#0d0d18;border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;overflow-x:auto;margin:1.25rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.75}
+    pre code{background:transparent;border:none;padding:0;font-size:inherit}
+    blockquote{border-left:3px solid var(--gold);background:rgba(251,191,36,.04);padding:1rem 1.25rem;margin:1.25rem 0;border-radius:0 10px 10px 0;color:var(--dim)}
+    .callout{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;margin:1rem 0}
+    .callout-intro,.callout-tip{border-left:3px solid var(--gold)}
+    .callout-source{border-left:3px solid var(--purple)}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;margin:1rem 0}
+    .card.highlight{border-left:3px solid var(--gold)}
+    .card.warn{border-left:3px solid #f59e0b}
+    .tag{display:inline-block;padding:.2rem .6rem;border-radius:6px;font-size:.72rem;font-weight:600;font-family:'Unbounded',sans-serif;background:rgba(251,191,36,.1);color:var(--gold-bright);border:1px solid rgba(251,191,36,.25);margin-right:.25rem}
+    hr{border:none;height:1px;background:var(--border);margin:2.5rem 0}
+    img{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--border);margin:1rem 0}
+    .section-num{display:inline-block;font-family:'Unbounded',sans-serif;font-weight:700;color:var(--gold);margin-right:.5rem}
+  </style>
+</head>
+<body>
+  <h1>Ранжироваться в ChatGPT и заменить SEO-команду агентами</h1>
+
+  <section class="callout callout-intro">
+    <h3>💡 О чём этот гайд</h3>
+    <p>Олег Шестаков, основатель Rush Agency и Black Flag SEO, рассказал, как уволил половину команды и подключил вместо неё рой AI-агентов. Внутри — рабочие практики для ранжирования в LLM, разбор экономики AI-нативного агентства и честный взгляд на digital-рынок 2026 года.</p>
+  </section>
+
+  <section class="callout callout-tip">
+    <h3>✅ Что ты освоишь</h3>
+    <ol>
+      <li>Как поисковики и LLM строят граф знаний — и почему ключевые слова больше не работают</li>
+      <li>Конкретный рецепт оптимизации страницы под цитирование в ChatGPT, Perplexity и Claude</li>
+      <li>Какие SEO-навыки уже переложены в <code>Skills</code> Claude и какие задачи делают агенты</li>
+      <li>Где брать ссылки и почему «бесплатные сабмиты» не двигают сайт</li>
+      <li>Куда смотреть предпринимателю в 2026 — какие рынки и каналы остались живыми</li>
+    </ol>
+  </section>
+
+  <hr>
+
+  <h2><span class="section-num">1.</span>Понять, как ранжируются современные поисковики</h2>
+
+  <p>Google перешёл от поиска по вхождениям к поиску по сущностям. Запрос <em>«найди итальянский ресторан у Профсоюзной с рейтингом и работой до 23:00»</em> на странице дословно не встретится никогда. Поисковик разбирает интент на граф:</p>
+
+  <pre class="diagram">сущность: ресторан
+├── кухня:    итальянская
+├── локация:  метро Профсоюзная
+├── рейтинг:  высокий
+└── часы:     до 23:00</pre>
+
+  <p>И ищет страницы, где эти сущности соседствуют. LLM работают так же. Значит первая задача — построить страницы под сущности, а не под ключи.</p>
+
+  <div class="card highlight">
+    <p><strong>Что делать:</strong> у Олега есть отдельное выступление по семантическому SEO — оно отвечает на вопрос «как описать сущность так, чтобы её распознали и Google, и ChatGPT». Найди и пересмотри его перед тем, как переписывать контент.</p>
+  </div>
+
+  <hr>
+
+  <h2><span class="section-num">2.</span>Оптимизировать страницу под цитирование в LLM</h2>
+
+  <p>LLM-боты «бедные по ресурсам». Они не дочитают статью, если ответ не на поверхности. Рецепт, который работает:</p>
+
+  <h3>Структура чанков</h3>
+  <ol>
+    <li><strong>Первый абзац — прямой ответ на интент.</strong> Никакой воды «в данной статье мы рассмотрим». Сразу: <em>лучшие карты для залива трафика — Capitalist и Spending</em>. Двоеточие, далее <code>key takeaways</code>: комиссии, безопасность, поддержка.</li>
+    <li><strong>Дальше — короткие чанки.</strong> Заголовок <code>H2</code> + 2 абзаца. Нейронка цитирует именно такой блок целиком.</li>
+    <li><strong>Списки и таблицы.</strong> Любой rich content повышает шанс попасть в ответ.</li>
+    <li><strong>Цифры и источники.</strong> По исследованиям, статьи с конкретными цифрами и таблицами цитируются в LLM на 35% чаще.</li>
+  </ol>
+
+  <h3>Факты «здесь и сейчас»</h3>
+  <p>Не <em>«казино X имеет лучшие бонусы в мире»</em>. А <em>«казино X даёт 200 фриспинов и 100% бонус на депозит — лучшая ставка по версии Casino Guru»</em>. LLM выбирают конкретику.</p>
+
+  <div class="card warn">
+    <p><strong>Технический стоп.</strong> Если сайт собран на тяжёлом JS-фреймворке с гидратацией — ChatGPT, Perplexity, Claude видят пустую страницу. Они не исполняют JavaScript. Нет SSR — нет цитирований.</p>
+  </div>
+
+  <hr>
+
+  <h2><span class="section-num">3.</span>Получить упоминания за пределами своего сайта</h2>
+
+  <p>Внутренняя оптимизация — половина дела. LLM хотят, чтобы про твой бренд писали другие. Что делать:</p>
+
+  <ul>
+    <li><strong>Listicles и подборки.</strong> Статьи формата <em>«топ-10 лучших Х»</em> на чужих сайтах с упоминанием бренда.</li>
+    <li><strong>Цитаты и упоминания</strong> на любых тематических площадках — чем больше, тем лучше.</li>
+    <li><strong>Контролируемая сеть статей.</strong> Агентство Олега запускает 100+ статей про клиента в разных гео из своей PBN-сети, чтобы манипулировать «консенсусом» — тем, что LLM считает общим мнением о бренде.</li>
+  </ul>
+
+  <p>Trust-понятия у LLM пока нет. Любой сайт с твоей статьёй учитывается как источник. Это окно закроется через 2-3 года, пока — рабочий рычаг.</p>
+
+  <section class="callout callout-tip">
+    <h3>🔧 Практический минимум</h3>
+    <p>Если бюджет небольшой — начни с трёх вещей: SSR-вёрстка страницы → первый абзац как прямой ответ → 5-10 внешних упоминаний с ссылкой. Уже этого хватит, чтобы попасть в рекомендации Perplexity по узким запросам.</p>
+  </section>
+
+  <hr>
+
+  <h2><span class="section-num">4.</span>Заменить рутину агентами</h2>
+
+  <p>Rush Agency уволил всех программистов, кроме одного синьора, и большую часть джунов-сеошников. Маржинальность агентства выросла с 20-35% до 60-85%. Что именно автоматизировано:</p>
+
+  <ul>
+    <li><strong>Аудит сайта.</strong> Агент парсит страницы, прогоняет по внутренним стандартам, формирует отчёт клиенту — без проверки человеком.</li>
+    <li><strong>Сбор и кластеризация семантики.</strong> Все навыки сеошника переложены в <code>Skills</code> Claude — инструкции, кейсы, примеры.</li>
+    <li><strong>Простановка ссылок.</strong> Агент сам открывает виртуальный браузер, регистрируется на GitHub, ставит ссылку, подтверждает почту.</li>
+    <li><strong>QA-агенты.</strong> Отдельный слой агентов с пониженной температурой проверяет работу первого слоя через A2A-протокол. Получается рой (swarm) агентов.</li>
+    <li><strong>Бухгалтерия, аккаунтинг, поддержка.</strong> Замена 1-в-1 на агента с доступом к API.</li>
+  </ul>
+
+  <div class="card highlight">
+    <p><strong>Цифра для оценки:</strong> один сеошник без агентов качественно ведёт 4 проекта. С агентами — 7. Эффективность ×1.5-2 на одного человека.</p>
+  </div>
+
+  <h3>Когда агента можно не проверять</h3>
+  <p>Олег держит правило <code>man in the loop</code> по умолчанию. Но если агент не ошибся последнюю тысячу запусков — его выпускают на автомат. Из 100 отчётов клиентам агент отправит один плохой; живой аккаунт-менеджер — семь-восемь.</p>
+
+  <hr>
+
+  <h2><span class="section-num">5.</span>Считать бюджет реалистично</h2>
+
+  <p>Олег раскрыл вилки агентских прайсов на гео США, чтобы ты мог сравнить со своим:</p>
+
+  <table style="width:100%;border-collapse:collapse;margin:1rem 0">
+    <thead>
+      <tr style="border-bottom:1px solid var(--border)">
+        <th style="text-align:left;padding:.6rem;color:var(--gold-bright)">Статья</th>
+        <th style="text-align:left;padding:.6rem;color:var(--gold-bright)">Белый проект</th>
+        <th style="text-align:left;padding:.6rem;color:var(--gold-bright)">Казино</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:.6rem">Работа агентства</td><td style="padding:.6rem">$3 500-4 000</td><td style="padding:.6rem">$4 000+</td></tr>
+      <tr><td style="padding:.6rem">Контент</td><td style="padding:.6rem">$1 500</td><td style="padding:.6rem">$1 500</td></tr>
+      <tr><td style="padding:.6rem">Ссылки</td><td style="padding:.6rem">$2 500</td><td style="padding:.6rem">$5 000+</td></tr>
+      <tr style="border-top:1px solid var(--border)"><td style="padding:.6rem"><strong>Итого/мес</strong></td><td style="padding:.6rem"><strong>~$8 000</strong></td><td style="padding:.6rem"><strong>$10 500-100 000</strong></td></tr>
+    </tbody>
+  </table>
+
+  <p>Бесплатные сабмиты типа GitHub-профиля работают только как первый сигнал. Без $1 000+/мес на ссылки белый SEO в США не двигается.</p>
+
+  <hr>
+
+  <h2><span class="section-num">6.</span>Вписать AI в свой день</h2>
+
+  <p>Если ты предприниматель и пока не пользуешься Claude — Олег даёт прямой совет:</p>
+
+  <blockquote>Каждый день выделяй час на работу в Claude. Через 40 дней ты офигеешь, сколько начнёшь автоматизировать.</blockquote>
+
+  <p>По данным Гарвардского исследования, компании, которые начинали AI-трансформацию <strong>с рутины</strong> — выставление счетов, customer support, отчёты — оказались на 33% успешнее тех, кто начал с инноваций. Сначала скучное, потом креативное.</p>
+
+  <h3>Что Claude уже делает в 2026</h3>
+  <ul>
+    <li>Пишет план аудита безопасности и сам исполняет его — закрывает порты, гоняет тестовые атаки.</li>
+    <li>Делает Pixel Perfect вёрстку из Figma за 15 минут на Tailwind CSS.</li>
+    <li>Вытягивает брендинг с одной страницы и переносит на новый сайт.</li>
+    <li>Через <code>Anthropic Agent SDK</code> поднимает 100 параллельных инстансов Claude Code и собирает 500 приложений в день.</li>
+  </ul>
+
+  <hr>
+
+  <h2><span class="section-num">7.</span>Выбрать рынок на 2026</h2>
+
+  <p>Главная рекомендация Олега — уходить с СНГ-рынка, если есть возможность.</p>
+
+  <div class="card warn">
+    <p>Яндекс пробит поведенческими ботами и работает плохо после декабря. ВК и RuTube — бесполезный трафик. Telegram-реклама в зоне риска регуляции. Из перформанс-каналов в РФ остаётся ЯндексДирект — и точечно SEO в Google, потому что в нём нет рекламных блоков выше выдачи, и первое место забирает 35% трафика.</p>
+  </div>
+
+  <h3>Куда смотреть</h3>
+  <ol>
+    <li><strong>Западные рынки.</strong> Английский, испанский, французский, немецкий. Растущий рынок прощает ошибки.</li>
+    <li><strong>Медийка.</strong> YouTube, Shorts, TikTok, Instagram. Личный бренд через подкаст-формат — то, что снимается прямо сейчас и работает в B2B.</li>
+    <li><strong>AI-нативные агентства и команды.</strong> Y Combinator уже инвестировал в Rank AI — первое агентство, где работу делают агенты, а люди только управляют.</li>
+  </ol>
+
+  <hr>
+
+  <section class="callout callout-tip">
+    <h3>🔑 Ключевые мысли</h3>
+    <ol>
+      <li>Поисковики и LLM ищут не по словам, а по графу сущностей. Контент нужно писать чанками с прямым ответом в первом абзаце.</li>
+      <li>Trust в LLM не существует — пока окно открыто, любые внешние упоминания работают как сигнал цитирования.</li>
+      <li>Claude Sonnet/Opus 4.6 уже закрывает большую часть SEO-, аудит- и dev-задач. Маржа агентства растёт с 25% до 70% при правильной автоматизации.</li>
+      <li>Сначала автоматизируй рутину — счета, отчёты, поддержку. Инновации после, не наоборот.</li>
+      <li>СНГ-рынок умирает по каналам. Энергию вкладывать в США/EU и в личный бренд через медийные форматы.</li>
+    </ol>
+  </section>
+
+  <section class="callout callout-source">
+    <h3>🔗 Источник</h3>
+    <p><a href="https://youtu.be/N1oL8AiLZOI" target="_blank" rel="noopener">Как вывести сайт в ТОП Google за 5 дней с помощью Claude — Олег Шестаков</a> · 43 минуты · подкаст с Антоном Хоминком</p>
+  </section>
+</body>
+</html>

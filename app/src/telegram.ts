@@ -8,6 +8,11 @@ export function getUser(): TelegramUser | undefined {
   return getWebApp()?.initDataUnsafe.user;
 }
 
+export function getStartParam(): string | undefined {
+  const raw = getWebApp()?.initDataUnsafe.start_param;
+  return typeof raw === 'string' ? raw : undefined;
+}
+
 export function initWebApp() {
   const wa = getWebApp();
   if (!wa) return;

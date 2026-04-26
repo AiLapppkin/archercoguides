@@ -16,6 +16,10 @@ INITDATA_TTL_SECONDS = "3600"
 RATE_LIMIT_PER_MINUTE = "10"
 # Comma-separated tg_ids that have admin access
 ADMIN_TG_IDS = "161799016"
+# Telegram bot username (without @) and miniapp short name — used to build
+# t.me/<bot>/<miniapp>?startapp=... deep links in broadcast buttons.
+BOT_USERNAME = "archercobot"
+MINIAPP_NAME = "guides"
 
 # D1 binding — database_id filled in after `wrangler d1 create archercoguides-db`
 [[d1_databases]]

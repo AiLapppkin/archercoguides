@@ -1,17 +1,25 @@
 import { useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Header } from './components/Header';
 import { Home } from './screens/Home';
 import { Categories, CategoryView } from './screens/Categories';
 import { Search } from './screens/Search';
 import { Guide } from './screens/Guide';
 import { Profile } from './screens/Profile';
-import { initWebApp } from './telegram';
+import { getStartParam, initWebApp } from './telegram';
 
 export default function App() {
+  const navigate = useNavigate();
   useEffect(() => {
     initWebApp();
-  }, []);
+    const param = getStartParam();
+    if (param && param.startsWith('guide_')) {
+      const slug = param.slice('guide_'.length);
+      if (/^[a-z0-9-]+$/i.test(slug)) {
+        navigate(`/guide/${slug}`, { replace: true });
+      }
+    }
+  }, [navigate]);
 
   return (
     <div className="min-h-screen">

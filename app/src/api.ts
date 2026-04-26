@@ -101,3 +101,46 @@ export async function fetchAdminStats(): Promise<AdminStats> {
   }
   return (await res.json()) as AdminStats;
 }
+
+export type BroadcastRow = {
+  id: number;
+  guide_id: string;
+  title: string;
+  teaser: string;
+  cover_url: string | null;
+  button_text: string;
+  start_param: string;
+  status: string;
+  recipients_total: number;
+  recipients_sent: number;
+  recipients_failed: number;
+  created_at: number;
+  finished_at: number | null;
+};
+
+export async function fetchBroadcastAudience(): Promise<{ count: number }> {
+  return req<{ count: number }>('/api/admin/broadcast/audience');
+}
+
+export async function fetchBroadcasts(): Promise<BroadcastRow[]> {
+  const r = await req<{ broadcasts: BroadcastRow[] }>('/api/admin/broadcast');
+  return r.broadcasts;
+}
+
+export async function fetchBroadcast(id: number): Promise<BroadcastRow> {
+  return req<BroadcastRow>(`/api/admin/broadcast/${id}`);
+}
+
+export async function createBroadcast(input: {
+  guide_id: string;
+  title: string;
+  teaser: string;
+  cover_url?: string;
+  button_text?: string;
+}): Promise<{ ok: boolean; id: number }> {
+  return req<{ ok: boolean; id: number }>('/api/admin/broadcast', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  });
+}

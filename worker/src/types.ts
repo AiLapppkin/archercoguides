@@ -6,6 +6,9 @@ export type Env = {
   ALLOWED_ORIGIN: string;
   INITDATA_TTL_SECONDS: string;
   RATE_LIMIT_PER_MINUTE: string;
+  ADMIN_TG_IDS: string;
+  BOT_USERNAME: string;
+  MINIAPP_NAME: string;
 };
 
 export type TgUser = {

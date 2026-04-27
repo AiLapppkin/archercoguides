@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pomelli: бесплатный AI от Google, который заменяет дизайнера и SMM-щика</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&family=Onest:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#0a0a0f; --card:#12121a; --border:#1e1e2e;
+      --text:#e4e4ef; --dim:#8888a0;
+      --gold:#fbbf24; --gold-bright:#fde047; --gold-deep:#d97706;
+      --purple:#7c3aed;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Onest',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding:2rem 1.25rem;max-width:800px;margin:0 auto}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:99;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
+    h1,h2,h3,h4{font-family:'Unbounded',sans-serif;font-weight:700;letter-spacing:-.01em;margin:1.75em 0 .5em;line-height:1.25}
+    h1{font-size:2rem;background:linear-gradient(135deg,var(--gold-bright),var(--gold-deep));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-top:0}
+    h2{font-size:1.4rem}
+    h3{font-size:1.1rem;color:var(--gold-bright)}
+    h4{font-size:.95rem;color:var(--gold)}
+    p{margin:.9em 0;color:var(--dim)}
+    strong{color:var(--text);font-weight:600}
+    em{color:var(--gold-bright);font-style:normal;font-weight:500}
+    ul,ol{margin:1em 0;padding-left:1.5em;color:var(--dim)}
+    li{margin:.4em 0}
+    li::marker{color:var(--gold)}
+    a{color:var(--gold);text-decoration:none;border-bottom:1px dashed rgba(251,191,36,.35)}
+    a:hover{border-bottom-color:var(--gold)}
+    code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:rgba(251,191,36,.08);color:var(--gold-bright);padding:.15em .4em;border-radius:5px;border:1px solid rgba(251,191,36,.15)}
+    pre{background:#0d0d18;border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;overflow-x:auto;margin:1.25rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.75}
+    pre code{background:transparent;border:none;padding:0;font-size:inherit}
+    blockquote{border-left:3px solid var(--gold);background:rgba(251,191,36,.04);padding:1rem 1.25rem;margin:1.25rem 0;border-radius:0 10px 10px 0;color:var(--dim)}
+    .callout{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;margin:1rem 0}
+    .callout-intro,.callout-tip{border-left:3px solid var(--gold)}
+    .callout-source{border-left:3px solid var(--purple)}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;margin:1rem 0}
+    .card.highlight{border-left:3px solid var(--gold)}
+    .card.warn{border-left:3px solid #f59e0b}
+    .tag{display:inline-block;padding:.2rem .6rem;border-radius:6px;font-size:.72rem;font-weight:600;font-family:'Unbounded',sans-serif;background:rgba(251,191,36,.1);color:var(--gold-bright);border:1px solid rgba(251,191,36,.25);margin-right:.25rem}
+    hr{border:none;height:1px;background:var(--border);margin:2.5rem 0}
+    img{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--border);margin:1rem 0}
+  </style>
+</head>
+<body>
+
+<h1>Pomelli: бесплатный AI от Google, который заменяет дизайнера и SMM-щика</h1>
+
+<section class="callout callout-intro">
+  <h3>💡 О чём этот гайд</h3>
+  <p>Google Labs выпустил <strong>Pomelli</strong> — инструмент, который сканирует сайт, собирает <em>Business DNA</em> (фирменные цвета, шрифты, тон, ценности) и автоматически генерирует креативы под бренд. За 5 минут он делает то, за что агентства берут $1000–2500.</p>
+  <p>Это синтез трёх обзоров: базовый workflow, шесть сценариев применения и готовая схема, как продавать контент-паки малому бизнесу за $300–2000/мес.</p>
+</section>
+
+<section class="callout callout-tip">
+  <h3>✅ Что ты освоишь</h3>
+  <ol>
+    <li>Запускать Pomelli и собирать Business DNA любого сайта за 3–5 минут</li>
+    <li>Генерировать кампании, карусели и сториз без дизайнера</li>
+    <li>Использовать новую фичу <em>Photoshoot</em> — продуктовые фото с моделью без съёмки</li>
+    <li>6 практических сценариев: от аудита бренда до реверс-инжиниринга конкурентов</li>
+    <li>Закрывать клиентов холодными письмами с двумя неделями бесплатного контента</li>
+  </ol>
+</section>
+
+<hr>
+
+<h2>Что такое Pomelli и почему это меняет правила</h2>
+
+<p>Pomelli живёт по адресу <code>labs.google/pomelli</code> и доступен бесплатно с любого Google-аккаунта. На входе — URL сайта. На выходе — три вещи:</p>
+
+<ol>
+  <li><strong>Business DNA</strong> — цифровой отпечаток бренда: цвета, шрифты, тон голоса, ценности, эстетика, изображения</li>
+  <li><strong>Идеи кампаний</strong> — три-четыре угла подачи под любую цель</li>
+  <li><strong>Готовые креативы</strong> — карусели, сториз, посты, продуктовые фото в фирменном стиле</li>
+</ol>
+
+<div class="card highlight">
+  <p>До Pomelli создание брендбука для нового клиента стоило агентству ~$1000 и занимало неделю. Теперь это 3 минуты на сканирование. Малый бизнес, который раньше не мог себе этого позволить, всё ещё <strong>не знает, что инструмент существует</strong> — и это окно возможностей.</p>
+</div>
+
+<hr>
+
+<h2>1. Шаг первый — собери Business DNA</h2>
+
+<p>Зайди на <code>labs.google/pomelli</code>, нажми <strong>Let's get started</strong>. На экране три блока: <em>Generate Business DNA</em> → <em>Get Campaign Ideas</em> → <em>Generate Creative</em>.</p>
+
+<p>Вставь URL сайта и жми <code>Continue</code>. Pomelli анализирует страницу 3–5 минут (бывает дольше при наплыве — увидишь сообщение «We're experiencing high demand»).</p>
+
+<p>На выходе получишь карточку бренда:</p>
+
+<ul>
+  <li>Логотип и название</li>
+  <li>Шрифты с сайта</li>
+  <li>Цветовая палитра</li>
+  <li>Подборка изображений (фото, иллюстрации, скриншоты)</li>
+  <li>Текущий слоган</li>
+  <li>Brand values, tone of voice, brand aesthetic, business overview</li>
+</ul>
+
+<div class="card warn">
+  <p><strong>Важно:</strong> Pomelli часто не находит логотип сам. Жми <code>Add logo</code> → <code>Upload images</code> и подгрузи руками. Без логотипа все креативы будут выглядеть стоково.</p>
+</div>
+
+<p>Удали placeholder-картинки, добавь свежие через <strong>Generate with AI</strong> или upload. Чем чище Business DNA — тем точнее последующие кампании.</p>
+
+<hr>
+
+<h2>2. Шаг второй — сгенерируй кампанию</h2>
+
+<p>После <code>Looks good</code> попадаешь в окно ввода промпта. Два варианта:</p>
+
+<ul>
+  <li><strong>Suggest ideas</strong> — Pomelli предложит 3–4 угла на основе DNA</li>
+  <li><strong>Свой промпт</strong> — опиши задачу одной строкой</li>
+</ul>
+
+<p>Пример рабочего промпта:</p>
+
+<pre><code>Создай мультиплатформенную кампанию для продвижения
+лид-магнита «гайд по AI-инструментам для маркетинга».
+Фокус — боли аудитории: нет времени на контент,
+дорогие дизайнеры. Решение — автоматизация через AI.</code></pre>
+
+<p>Pomelli выдаст 3 разных угла. Кликни понравившийся — через 30 секунд получишь карусель из 4 креативов. Каждый можно править: изменить заголовок, описание, картинку, шрифт, добавить CTA.</p>
+
+<h3>Базовые операции с креативом</h3>
+
+<ul>
+  <li><code>Fix layout</code> — пересобрать композицию</li>
+  <li><code>Image preview</code> → выбрать другое фото из DNA или сгенерировать</li>
+  <li><code>Animate</code> — оживить картинку (ripple-эффект, движение) для соцсетей</li>
+  <li>Три точки → <code>Duplicate same size</code> или <code>Duplicate</code> в другом формате (square, story, feed)</li>
+  <li><code>Reset Business DNA</code> — начать заново с другим сайтом</li>
+</ul>
+
+<div class="card">
+  <p>Перед сбросом нажми <code>Download your business data</code>. JSON с DNA можно скормить отдельной GPT-проекту, чтобы тренировать ассистента на тоне бренда.</p>
+</div>
+
+<hr>
+
+<h2>3. Photoshoot — новая фича для продуктовой съёмки</h2>
+
+<p>Это апдейт, ради которого многие открыли Pomelli заново. Раньше для фото продукта в контексте нужен был фотограф, модель, локация и день съёмки. Теперь:</p>
+
+<ol>
+  <li>Внутри Business DNA жми <code>Photo shoot</code></li>
+  <li>Выбери продукт из загруженных изображений</li>
+  <li>Выбери шаблон: <strong>Beauty / Fashion / Consumables / Home</strong></li>
+  <li>Выбери стиль: <em>In-use / Studio / Contextual</em> (плюс сезонные — Easter, Mother's Day)</li>
+  <li>Жми <code>Create photo shoot</code> — ждёшь ~2 минуты</li>
+</ol>
+
+<p>На выходе — продукт в реалистичной обстановке: интерьер, модель, естественное освещение. Один кейс из видео: дом класса люкс на Мауи, сгенерированы фото с живой моделью внутри пустых комнат с сайта застройщика. Ноль съёмки, ноль локейшна.</p>
+
+<div class="card highlight">
+  <p>Под капотом, скорее всего, работает <strong>Nano Banana</strong> (Gemini Image) — поэтому все правки фотореалистичны и держат идентичность модели/продукта между кадрами.</p>
+</div>
+
+<hr>
+
+<h2>4. Шесть сценариев применения</h2>
+
+<h3>Сценарий 1 — аудит бренда перед запуском</h3>
+
+<p>Прогоняешь свой сайт через Pomelli и смотришь, как AI <em>интерпретирует</em> бренд. Если tone of voice или brand values звучат не так, как ты задумывал — это красный флаг. Значит, сайт читается противоречиво. Правь мессаджинг до того, как закажешь дизайн или рекламу.</p>
+
+<h3>Сценарий 2 — промо лид-магнита</h3>
+
+<p>Промпт: <em>«Кампания для продвижения лид-магнита X на нескольких соцплатформах. Опиши лид-магнит в двух строках»</em>. Pomelli выдаст три угла. Бери понравившийся, добавляй stories через <code>Add creative</code> → <code>Story</code> 9:16, анимируй. Готов набор для запуска за 10 минут.</p>
+
+<h3>Сценарий 3 — креативы под конкретный лендинг</h3>
+
+<p>Скармливаешь Pomelli не главную страницу, а URL <strong>конкретного оффера</strong>. DNA соберётся вокруг него. Потом промпт: <em>«Кампания продаёт программу X. Боли аудитории — Y. Программа решает их через Z»</em>. Получишь карусели, идеально совпадающие по визуалу с лендингом — клик на креатив → переход → ощущение «я в правильном месте» → выше конверсия.</p>
+
+<h3>Сценарий 4 — A/B тестирование рекламы</h3>
+
+<p>Алгоритмы Meta и Google умеют находить аудиторию сами. Твоя работа — генерировать варианты креатива. Pomelli делает 5–15 онбренд-вариаций одной идеи за минуты:</p>
+
+<ul>
+  <li><code>Duplicate same size</code> → меняешь только заголовок</li>
+  <li><code>Duplicate same size</code> → меняешь только CTA</li>
+  <li><code>Duplicate same size</code> → меняешь только фон</li>
+  <li>Запускаешь все варианты в одной рекламной кампании, смотришь победителя</li>
+</ul>
+
+<h3>Сценарий 5 — свайп-файл для аффилиатов</h3>
+
+<p>Дать партнёру голый логотип = сократить продажи. Дать готовый набор онбренд-постов с его текстом = увеличить вероятность, что он реально запостит. Бери шаблон из Pomelli, меняй описание под каждого аффилиата:</p>
+
+<blockquote>
+  <p>«Use Pat Flynn's Short Form Formula — трёхшаговая система для предсказуемой выручки с короткого видео».</p>
+</blockquote>
+
+<p>Кастомный креатив за 30 секунд вместо часа в Canva.</p>
+
+<h3>Сценарий 6 — реверс-инжиниринг конкурента</h3>
+
+<p>Вставь URL конкурента. Получишь его brand values, tone of voice, эстетику — то, что AI считает работающим для этой ниши. Сравни со своим DNA, найди gap-ы. Пример из видео: у Cursor слоган <em>«Zero bugs for the new year»</em> — можно взять идею посыла и переработать под свой продукт.</p>
+
+<hr>
+
+<h2>5. Как монетизировать Pomelli</h2>
+
+<p>Малый бизнес — кофейни, риелторы, барбершопы, фитнес-студии — <strong>не знает</strong>, что Pomelli существует. Они платят $300–2000/мес SMM-щикам или вообще забили на соцсети. Это и есть твой рынок.</p>
+
+<div class="card highlight">
+  <p><strong>Что продавать:</strong> не «маркетинг» и не «лиды». Продавай <em>контент-пак</em> — 20 постов в месяц, опубликованных на их соцсетях. Не отвечаешь за продажи, отвечаешь только за то, что посты выходят.</p>
+  <p><strong>Цена:</strong> $300–600/мес для wholesale-агентств, $1000–2000/мес напрямую клиенту, $5000+/мес если несколько платформ + видео.</p>
+</div>
+
+<h3>Шаг 1 — найди подходящих клиентов через Gemini</h3>
+
+<p>Промпт для Gemini:</p>
+
+<pre><code>Я владелец агентства, использую Google Pomelli для
+автоматизации SMM. Дай список 20 high-ticket локальных
+бизнесов в [город]. Имя, адрес, телефон, social deficit.
+Критерий: слабое или неактивное присутствие в соцсетях.
+Последний пост — 3+ месяца назад.</code></pre>
+
+<p>Gemini вернёт список с указанием конкретного social gap для каждого. Идеальный клиент:</p>
+
+<ul>
+  <li>500–1000 подписчиков (понимает ценность соцсетей)</li>
+  <li>Постил активно, но 6–12 месяцев тишины (потерял SMM-щика, нет бандвидта)</li>
+  <li>High-ticket бизнес: ремонты, недвижимость, медцентры, юристы</li>
+</ul>
+
+<h3>Шаг 2 — Irresistible Offer через холодный email</h3>
+
+<p>Не продавай в лоб. Дай ценность авансом — два примера постов, сделанных на их DNA.</p>
+
+<pre><code>Subject: [Название бизнеса] — две недели бесплатного контента
+
+Привет, [имя]. Прогнал ваш сайт через AI-сканер бренда —
+он мгновенно вытащил тон, цвета и позиционирование.
+
+Вижу, что вы отлично постили на Instagram, но последние
+6 месяцев тишина. Каждый день простоя — это деньги,
+оставленные на столе.
+
+Я специализируюсь на этом и подготовил для вас
+2 недели бесплатного контента. Прикладываю 2 поста,
+сгенерированных прямо из вашего сайта.
+
+Понравится — обсудим работу дальше. Не понравится —
+ничего не должны. У вас всё равно остаются 2 недели
+готового контента.
+
+— [имя]</code></pre>
+
+<h3>Шаг 3 — закрытие через Go High Level (или аналог)</h3>
+
+<p>Когда клиент говорит «давай попробуем», нужен инструмент для подключения соцсетей и шедулинга. Подходит любой: Buffer, Later, Metricool, Go High Level. Логика одинаковая:</p>
+
+<ol>
+  <li>Клиент подключает свои аккаунты по защищённой ссылке (без передачи паролей)</li>
+  <li>Генеришь 30 постов в Pomelli за 1–2 часа</li>
+  <li>Заливаешь в шедулер, расставляешь даты</li>
+  <li>Месяц контента уходит на автомате — ты получаешь оплату за месяц</li>
+</ol>
+
+<div class="card">
+  <p>Бизнес-модель работает потому, что клиент платит <strong>за процесс</strong>, а не за результат. Каждый день — пост в его ленте. Каждый день он видит, что «этот человек справляется». Через год — стабильный $1500/мес с одного клиента и пять часов работы в неделю.</p>
+</div>
+
+<hr>
+
+<h2>6. Конвейер «два часа = 30 постов»</h2>
+
+<p>Полный цикл от сканирования до 30 запланированных постов:</p>
+
+<ol>
+  <li><strong>0–5 мин</strong> — Pomelli сканирует сайт, собирает DNA</li>
+  <li><strong>5–10 мин</strong> — добавляешь логотип, чистишь placeholder-изображения</li>
+  <li><strong>10–40 мин</strong> — генерируешь 6 кампаний по 4 креатива = 24 поста</li>
+  <li><strong>40–60 мин</strong> — Photoshoot для 6 продуктовых кадров</li>
+  <li><strong>60–90 мин</strong> — догенерируешь stories через <code>Add creative</code></li>
+  <li><strong>90–120 мин</strong> — заливаешь всё в шедулер, расставляешь даты, прописываешь подписи через AI-кнопку</li>
+</ol>
+
+<p>Ключ — не пытайся сделать каждый пост идеальным. Pomelli даёт <em>хорошую базовую точку</em>. 5–10 минут правок на пост — потолок, иначе экономика не сходится.</p>
+
+<hr>
+
+<section class="callout callout-tip">
+  <h3>🔑 Ключевые мысли</h3>
+  <ol>
+    <li><strong>Business DNA — главная фича</strong>. Это не «генератор картинок», а цифровой брендбук, который потом гонит весь контент</li>
+    <li><strong>Photoshoot убивает классическую продуктовую съёмку</strong> для малого бизнеса. Модель + локация + продукт — за 2 минуты</li>
+    <li><strong>Окно возможностей открыто прямо сейчас</strong>. Малый бизнес не знает про Pomelli. Кто первым придёт с готовым контент-паком — тот и заберёт деньги</li>
+    <li><strong>Не продавай маркетинг — продавай посты</strong>. Не отвечай за конверсию, отвечай за факт публикации. Так клиенты не уходят</li>
+    <li><strong>Irresistible offer работает</strong>: дай 2 недели контента бесплатно, сгенерированного на их сайте. Это не риск, это демонстрация компетенции</li>
+  </ol>
+</section>
+
+<section class="callout callout-source">
+  <h3>🔗 Источники</h3>
+  <p>Гайд собран из трёх обзоров на YouTube:</p>
+  <ul>
+    <li><a href="https://youtu.be/vLRfYHEeKck">Rick Mully — 5 use cases Pomelli</a> (12 мин)</li>
+    <li><a href="https://youtu.be/YfecCjUCuGQ">Ryan Doser — базовый workflow</a> (9 мин)</li>
+    <li><a href="https://youtu.be/luTsnbbV3gk">Nick Ponty — Photoshoot update + монетизация</a> (28 мин)</li>
+  </ul>
+  <p>Инструмент: <a href="https://labs.google/pomelli">labs.google/pomelli</a> — бесплатно с любого Google-аккаунта.</p>
+</section>
+
+</body>
+</html>

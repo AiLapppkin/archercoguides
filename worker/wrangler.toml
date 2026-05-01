@@ -20,6 +20,9 @@ ADMIN_TG_IDS = "161799016"
 # t.me/<bot>/<miniapp>?startapp=... deep links in broadcast buttons.
 BOT_USERNAME = "archercobot"
 MINIAPP_NAME = "guides"
+# Public channel that receives the same announcement as the user broadcast.
+# Bot must be added as admin with "Post Messages" right. Empty = disabled.
+BROADCAST_CHANNEL = "@thearchrai"
 
 # D1 binding — database_id filled in after `wrangler d1 create archercoguides-db`
 [[d1_databases]]

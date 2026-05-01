@@ -10,7 +10,7 @@ export type SendResult = { ok: true } | { ok: false; status: number; description
 
 export async function sendPhoto(
   botToken: string,
-  chatId: number,
+  chatId: number | string,
   photoUrl: string,
   caption: string,
   replyMarkup?: { inline_keyboard: InlineKeyboardButton[][] },
@@ -31,7 +31,7 @@ export async function sendPhoto(
 
 export async function sendMessage(
   botToken: string,
-  chatId: number,
+  chatId: number | string,
   text: string,
   replyMarkup?: { inline_keyboard: InlineKeyboardButton[][] },
 ): Promise<SendResult> {

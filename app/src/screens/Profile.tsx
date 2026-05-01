@@ -464,6 +464,24 @@ function BroadcastHistoryRow({ row }: { row: BroadcastRow }) {
           {row.recipients_failed > 0 && (
             <span className="text-red-400"> ✕{row.recipients_failed}</span>
           )}
+          {row.channel_status && (
+            <span
+              className={
+                row.channel_status === 'ok'
+                  ? 'text-emerald-400 ml-2'
+                  : row.channel_status === 'failed'
+                    ? 'text-red-400 ml-2'
+                    : 'text-obsidian-dim ml-2'
+              }
+              title={row.channel_error ?? undefined}
+            >
+              {row.channel_status === 'ok'
+                ? '📣 channel ok'
+                : row.channel_status === 'failed'
+                  ? '📣 channel ✕'
+                  : '📣 channel off'}
+            </span>
+          )}
         </span>
         <span>{formatTime(row.created_at)}</span>
       </div>

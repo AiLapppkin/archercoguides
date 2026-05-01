@@ -139,6 +139,8 @@ export type BroadcastRow = {
   created_by: number;
   created_at: number;
   finished_at: number | null;
+  channel_status: string | null;
+  channel_error: string | null;
 };
 
 export async function createBroadcast(db: D1Database, input: BroadcastInput): Promise<number> {
@@ -232,6 +234,18 @@ export async function recordDelivery(
       .bind(tgId)
       .run();
   }
+}
+
+export async function setChannelDeliveryStatus(
+  db: D1Database,
+  id: number,
+  status: 'ok' | 'failed' | 'disabled',
+  error: string | null,
+): Promise<void> {
+  await db
+    .prepare(`UPDATE broadcasts SET channel_status = ?1, channel_error = ?2 WHERE id = ?3`)
+    .bind(status, error, id)
+    .run();
 }
 
 export async function getBroadcast(db: D1Database, id: number): Promise<BroadcastRow | null> {

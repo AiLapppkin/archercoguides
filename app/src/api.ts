@@ -116,6 +116,8 @@ export type BroadcastRow = {
   recipients_failed: number;
   created_at: number;
   finished_at: number | null;
+  channel_status: string | null;
+  channel_error: string | null;
 };
 
 export async function fetchBroadcastAudience(): Promise<{ count: number }> {

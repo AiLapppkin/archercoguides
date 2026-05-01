@@ -16,6 +16,7 @@ import {
   logView,
   recordDelivery,
   setBroadcastStatus,
+  setChannelDeliveryStatus,
   toggleFavorite,
   upsertUser,
 } from './db';
@@ -197,6 +198,13 @@ function buildMiniappUrl(env: Env, slug: string): string {
   return `${env.GUIDES_ORIGIN.replace(/\/$/, '')}/?guide=${safeSlug}`;
 }
 
+function buildChannelDeepLink(env: Env, startParam: string): string {
+  // Channels do not support web_app inline buttons. Use a t.me deep link to
+  // the bot's named miniapp; Telegram will open it with the given start_param.
+  const safe = startParam.replace(/[^a-z0-9_-]/gi, '');
+  return `https://t.me/${env.BOT_USERNAME}/${env.MINIAPP_NAME}?startapp=${safe}`;
+}
+
 function buildCaption(title: string, teaser: string): string {
   return `<b>${escapeHtml(title)}</b>\n\n${escapeHtml(teaser)}`;
 }
@@ -312,12 +320,44 @@ async function runBroadcast(env: Env, broadcastId: number): Promise<void> {
       }
     }
 
+    await postToChannel(env, broadcastId, row, caption);
+
     await setBroadcastStatus(env.DB, broadcastId, 'done', { finished_at: Math.floor(Date.now() / 1000) });
   } catch (err) {
     console.error('[broadcast]', broadcastId, err);
     await setBroadcastStatus(env.DB, broadcastId, 'failed', {
       finished_at: Math.floor(Date.now() / 1000),
     });
+  }
+}
+
+async function postToChannel(
+  env: Env,
+  broadcastId: number,
+  row: { guide_id: string; cover_url: string | null; button_text: string; start_param: string },
+  caption: string,
+): Promise<void> {
+  const channel = (env.BROADCAST_CHANNEL || '').trim();
+  if (!channel) {
+    await setChannelDeliveryStatus(env.DB, broadcastId, 'disabled', null);
+    return;
+  }
+  const deepLink = buildChannelDeepLink(env, row.start_param);
+  const replyMarkup = {
+    inline_keyboard: [[{ text: row.button_text, url: deepLink }]],
+  };
+  const result = row.cover_url
+    ? await sendPhoto(env.BOT_TOKEN, channel, row.cover_url, caption, replyMarkup)
+    : await sendMessage(env.BOT_TOKEN, channel, caption, replyMarkup);
+  if (result.ok) {
+    await setChannelDeliveryStatus(env.DB, broadcastId, 'ok', null);
+  } else {
+    await setChannelDeliveryStatus(
+      env.DB,
+      broadcastId,
+      'failed',
+      `${result.status}: ${result.description}`.slice(0, 500),
+    );
   }
 }
 

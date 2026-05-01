@@ -9,6 +9,7 @@ export type Env = {
   ADMIN_TG_IDS: string;
   BOT_USERNAME: string;
   MINIAPP_NAME: string;
+  BROADCAST_CHANNEL: string;
 };
 
 export type TgUser = {

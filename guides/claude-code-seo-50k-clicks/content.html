@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code + SEO: конвейер на 50 000 кликов в месяц без команды</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&family=Onest:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#0a0a0f; --card:#12121a; --border:#1e1e2e;
+      --text:#e4e4ef; --dim:#8888a0;
+      --gold:#fbbf24; --gold-bright:#fde047; --gold-deep:#d97706;
+      --purple:#7c3aed;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Onest',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding:2rem 1.25rem;max-width:800px;margin:0 auto}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:99;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
+    h1,h2,h3,h4{font-family:'Unbounded',sans-serif;font-weight:700;letter-spacing:-.01em;margin:1.75em 0 .5em;line-height:1.25}
+    h1{font-size:2rem;background:linear-gradient(135deg,var(--gold-bright),var(--gold-deep));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-top:0}
+    h2{font-size:1.4rem}
+    h3{font-size:1.1rem;color:var(--gold-bright)}
+    h4{font-size:.95rem;color:var(--gold)}
+    p{margin:.9em 0;color:var(--dim)}
+    strong{color:var(--text);font-weight:600}
+    em{color:var(--gold-bright);font-style:normal;font-weight:500}
+    ul,ol{margin:1em 0;padding-left:1.5em;color:var(--dim)}
+    li{margin:.4em 0}
+    li::marker{color:var(--gold)}
+    a{color:var(--gold);text-decoration:none;border-bottom:1px dashed rgba(251,191,36,.35)}
+    a:hover{border-bottom-color:var(--gold)}
+    code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:rgba(251,191,36,.08);color:var(--gold-bright);padding:.15em .4em;border-radius:5px;border:1px solid rgba(251,191,36,.15)}
+    pre{background:#0d0d18;border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;overflow-x:auto;margin:1.25rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.75}
+    pre code{background:transparent;border:none;padding:0;font-size:inherit}
+    blockquote{border-left:3px solid var(--gold);background:rgba(251,191,36,.04);padding:1rem 1.25rem;margin:1.25rem 0;border-radius:0 10px 10px 0;color:var(--dim)}
+    .callout{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;margin:1rem 0}
+    .callout-intro,.callout-tip{border-left:3px solid var(--gold)}
+    .callout-source{border-left:3px solid var(--purple)}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;margin:1rem 0}
+    .card.highlight{border-left:3px solid var(--gold)}
+    .card.warn{border-left:3px solid #f59e0b}
+    .tag{display:inline-block;padding:.2rem .6rem;border-radius:6px;font-size:.72rem;font-weight:600;font-family:'Unbounded',sans-serif;background:rgba(251,191,36,.1);color:var(--gold-bright);border:1px solid rgba(251,191,36,.25);margin-right:.25rem}
+    hr{border:none;height:1px;background:var(--border);margin:2.5rem 0}
+    img{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--border);margin:1rem 0}
+  </style>
+</head>
+<body>
+
+<h1>Claude Code + SEO: конвейер на 50 000 кликов в месяц без команды</h1>
+
+<section class="callout callout-intro">
+  <h3>💡 О чём этот гайд</h3>
+  <p>Автор за 4–6 лет довёл свой бизнес до <strong>50 000 кликов в месяц</strong> и продал его за полмиллиона долларов. Здесь — сжатый до часа разбор того, что у него заняло годы: две тактики (массовый блог и сервисные страницы) плюс полный пайплайн через Claude Code.</p>
+  <p>Ноль кода, никакого WordPress. Главный инсайт: <em>Google зарабатывает на рекламе и потому ранжирует то, что удерживает читателя</em>. Значит, контент должен быть не AI-slop, а живым — с юмором, голосом и историями.</p>
+</section>
+
+<section class="callout callout-tip">
+  <h3>✅ Что ты освоишь</h3>
+  <ol>
+    <li>Поднять сайт со Static Site Generation в Antigravity + Claude Code за 15 минут</li>
+    <li>Находить «выигрышные» ключи в SEMrush (difficulty &lt; 30, volume &gt; 100, informational intent)</li>
+    <li>Генерить блог-посты с keyword clusters, изображениями из Pexels и собственным голосом</li>
+    <li>Строить сервисные страницы по схеме «zipper»: услуга × город</li>
+    <li>Прогонять контент через 80+ on-page чек-лист и добивать Lighthouse до 100/100</li>
+    <li>Обернуть весь пайплайн в Claude Code Skill <code>/blog</code> и публиковать по графику</li>
+    <li>Деплоить на Vercel и подключать Search Console, GMB, GA</li>
+  </ol>
+</section>
+
+<hr>
+
+<h2>1. Что вообще такое SEO и почему это до сих пор работает</h2>
+
+<p>SEO — про то, как попасть наверх Google по нужному запросу. Распределение кликов жестокое:</p>
+
+<ul>
+  <li><strong>40%</strong> кликов уходят на 1-ю позицию</li>
+  <li><strong>20%</strong> — на 2-ю</li>
+  <li>Дальше — резкое падение</li>
+</ul>
+
+<p>Четыре оси работы:</p>
+
+<ol>
+  <li><strong>Поиск ключей</strong> — не все запросы одинаково ценны</li>
+  <li><strong>On-page SEO</strong> — что и как написано на странице</li>
+  <li><strong>Technical SEO</strong> — как сайт собран (скорость, Core Web Vitals)</li>
+  <li><strong>Off-page SEO</strong> — что говорят про вас другие сайты</li>
+</ol>
+
+<div class="card highlight">
+  <p><strong>AI SEO ≈ обычное SEO.</strong> Когда ChatGPT, Perplexity или Google AI отвечает на вопрос — он лезет в поиск, забирает топ и пересказывает. Хорошо ранжируешься в Google → попадаешь в LLM-ответы.</p>
+</div>
+
+<hr>
+
+<h2>2. Сетап: Antigravity + Claude Code + CLAUDE.md</h2>
+
+<p>Качаем <a href="https://antigravity.google">antigravity.google</a> — это бесплатный десктоп от Google поверх VS Code. В таб <em>Extensions</em> ставим Claude Code.</p>
+
+<ol>
+  <li>Создаём пустую папку проекта (например, <code>seo-brief</code>)</li>
+  <li>Кладём в корень файл <code>CLAUDE.md</code> с инструкциями и правилами проекта</li>
+  <li>Открываем папку в Antigravity, запускаем Claude и даём промпт на сборку сайта</li>
+</ol>
+
+<p>Промпт для первой итерации:</p>
+
+<pre><code>Build a beautiful website with three pages:
+home, blog index, service index. Clone the design
+from the attached screenshot. Use Static Site
+Generation. Stack: Next.js with SSG output.</code></pre>
+
+<div class="card">
+  <p>Скриншот для референса бери с <a href="https://dribbble.com">dribbble.com</a> — без него получится AI-slop. Открой первый подходящий лендинг по теме, сделай скрин, прикрепи к промпту.</p>
+</div>
+
+<h3>Static, Server, Client — почему это критично</h3>
+
+<p>Три типа рендеринга, как в пиццерии:</p>
+
+<ul>
+  <li><strong>SSG (Static Site Generation)</strong> — пицца уже готова, отдают за 10 секунд. Google заходит — страница есть. Это то, что нам нужно</li>
+  <li><strong>SSR (Server-Side)</strong> — пиццу готовят при заказе, надо ждать. Google ждёт, иногда уходит</li>
+  <li><strong>CSR (Client-Side)</strong> — делайте пиццу сами. Google вообще не увидит контент</li>
+</ul>
+
+<p>Без SSG все остальные усилия по SEO бесполезны — если краулер не видит страницу, ранжировать нечего.</p>
+
+<hr>
+
+<h2>3. Поиск выигрышных ключевых слов</h2>
+
+<p>Просить Claude «дай 20 ключей по сантехнике» — путь в никуда. Модель не знает ни volume, ни difficulty. Нужен внешний инструмент. Автор использует <strong>SEMrush</strong> (есть бесплатный триал).</p>
+
+<h3>Фильтры в Keyword Magic Tool</h3>
+
+<p>Вбиваешь корневой ключ, например <code>plumber</code>. Получаешь миллион вариаций. Оставляешь только то, что реально берётся:</p>
+
+<ul>
+  <li><strong>Keyword Difficulty ≤ 30</strong> — даёт реальный шанс пробиться</li>
+  <li><strong>Volume ≥ 100</strong> — меньше нет смысла оптимизировать</li>
+  <li><strong>Intent: Informational</strong> — для блога. Для сервисных страниц — Commercial</li>
+</ul>
+
+<div class="card warn">
+  <p>Отсекай ключи, которые на самом деле <strong>чужие бренды</strong> (например, «Hydrojet Plumbing» — название компании). Их ты не отранжируешь, и попытка только сожжёт ресурсы.</p>
+</div>
+
+<h3>Дополнительные источники</h3>
+
+<ul>
+  <li><strong>Questions tab</strong> в SEMrush — готовые темы для блога: «How much does a plumber cost?»</li>
+  <li><strong>Adjacent topics</strong> — то, что читают <em>до</em> готовности купить: «best water softener 2026», «signs you need a new water heater»</li>
+  <li><strong>Competitor research</strong> — вбиваешь домен конкурента, забираешь его рангирующиеся ключи</li>
+</ul>
+
+<p>Собранные ключи экспортируешь как CSV и кладёшь в проект как <code>keywords.csv</code>.</p>
+
+<hr>
+
+<h2>4. Тактика №1: блог-посты на потоке</h2>
+
+<h3>Шаг 1 — первый сырой пост</h3>
+
+<p>Получи <a href="https://www.pexels.com/api/">Pexels API key</a>, положи в <code>.env</code>:</p>
+
+<pre><code>PEXELS_API_KEY=your_key_here</code></pre>
+
+<p>Промпт:</p>
+
+<pre><code>Create a blog post for the keyword "plumber for low
+water pressure". Build a keyword cluster — pull related
+keywords from keywords.csv or generate them. Pull
+images from Pexels using the API key in .env.</code></pre>
+
+<h3>Что такое keyword cluster</h3>
+
+<p>Один пост ранжируется не за один ключ, а за десятки. Корневой ключ «how to unclog a drain» обрастает кластером:</p>
+
+<ul>
+  <li>unclog kitchen sink</li>
+  <li>unclog bathroom sink</li>
+  <li>drain won't drain</li>
+  <li>slow drain sink</li>
+  <li>home remedy clogged drain</li>
+  <li>what dissolves hair in drain</li>
+</ul>
+
+<p>Все они вшиваются в одну страницу. На выходе — пост, который ловит трафик с десятков смежных запросов.</p>
+
+<h3>Шаг 2 — добавить голос, юмор, истории</h3>
+
+<p>Сырой результат всегда AI-slop: «in today's fast-paced world, maintaining a functional household...». Это никто не дочитает, и Google это видит по dwell time.</p>
+
+<p>Создаём в проекте папку <code>references/</code> с пятью файлами:</p>
+
+<ul>
+  <li><code>voice.md</code> — как ты пишешь</li>
+  <li><code>humor.md</code> — конкретные приёмы юмора, dad-jokes, side notes</li>
+  <li><code>opinions.md</code> — твои сильные позиции</li>
+  <li><code>stats.md</code> — реальные цифры бизнеса (сколько лет на рынке, сколько прочисток сделали)</li>
+  <li><code>stories.md</code> — анекдоты с реальных вызовов</li>
+</ul>
+
+<p>Чем заполнить: транскрипты звонков, посты в LinkedIn, переписка в Gmail, любые тексты, где звучит твой голос. Скармливаешь Claude — он сам разложит по файлам:</p>
+
+<pre><code>Update voice.md, humor.md, opinions.md, stats.md and
+stories.md based on these LinkedIn posts:
+[вставляешь тексты]</code></pre>
+
+<div class="card highlight">
+  <p>Если своих текстов нет — найди референс. Автор в видео цитирует tone «I've got 99 problems but humor ain't one» и просит Claude использовать как humor reference. Этого достаточно, чтобы получить пост с настоящими шутками вместо корпоративного бубнежа.</p>
+</div>
+
+<h3>Шаг 3 — украсть формулу из топа Google</h3>
+
+<p>SEO — это «чёрный ящик»: 200+ ранжирующих сигналов, точные веса не известны никому. Самый прямой путь — <strong>скопировать то, что уже работает</strong>.</p>
+
+<p>В промпте для переписывания поста:</p>
+
+<pre><code>Before rewriting, search Google for the primary
+keyword. Take the top 3 non-Reddit results.
+Analyze each: word count, H2/H3 structure,
+number of images, sub-topics covered.
+Average those metrics — that's the winning formula.
+Use the average word count, H2 count and structure
+for our post. Then inject our voice, humor, stats
+and stories from references/.</code></pre>
+
+<p>На выходе — пост размером и структурой как у топ-3, но в твоём голосе. Например, вместо «in today's fast-paced world» получаешь:</p>
+
+<blockquote>
+  <p>«Your toilet has been hissing for longer than most celebrity marriages. It's 11 p.m., you're Googling 'running toilet' instead of sleeping, and you're starting to take the sound personally.»</p>
+</blockquote>
+
+<hr>
+
+<h2>5. Тактика №2: сервисные страницы (zipper-схема)</h2>
+
+<p>Блог даёт <em>topical authority</em> — Google видит, что ты эксперт в нише. Сервисные страницы конвертят этот трафик в деньги, потому что они под коммерческие запросы.</p>
+
+<h3>Schema «zipper»</h3>
+
+<p>У бизнеса есть две оси:</p>
+
+<ul>
+  <li><strong>Услуги</strong>: emergency plumber, drain cleaning, hot water repair, leak detection</li>
+  <li><strong>Локации</strong>: Vancouver, Toronto, Montreal, Edmonton</li>
+</ul>
+
+<p>Сшиваешь их попарно в страницы:</p>
+
+<pre><code>emergency-plumber-vancouver
+emergency-plumber-toronto
+drain-cleaning-vancouver
+drain-cleaning-toronto
+...</code></pre>
+
+<div class="card warn">
+  <p>Не делай тысячи таких страниц. Контент похож, и Google пометит это как doorway pages. Пара десятков — нормально. Сотни — рискованно.</p>
+</div>
+
+<h3>Поиск денежных ключей</h3>
+
+<p>В SEMrush сортируй по <strong>Cost Per Click</strong> по убыванию. Дорогие клики = реальные конкуренты платят за этот запрос Google Ads = это коммерческий запрос. Паттерн в выдаче будет «service + city» — это и есть твой шаблон сервисной страницы.</p>
+
+<h3>Шаблон страницы — копия с конверсии</h3>
+
+<p>Не лепи каждую сервисную страницу по отдельному дизайну. Запусти Google Ads на 5–10 вариантов лендинга, найди тот, у кого конверсия 15–20%, и используй его шаблон для всех сервисных страниц.</p>
+
+<hr>
+
+<h2>6. On-page SEO: 80+ сигналов в один промпт</h2>
+
+<p>Нет смысла учить вручную, что такое meta description, alt-теги, schema markup. Один раз кладёшь в проект <code>onpage-checklist.md</code> с 80 пунктами и просишь Claude прогнать через него каждый пост.</p>
+
+<p>Что должно быть в чек-листе (минимум):</p>
+
+<ul>
+  <li>Ровно один <code>&lt;h1&gt;</code>; чёткая иерархия H2/H3</li>
+  <li>Primary keyword в первых 100 словах</li>
+  <li>2–3 external links на авторитетные источники</li>
+  <li>3–5 internal links на свои блог-посты и сервисные страницы</li>
+  <li>4–8 раскрытых вопросов в посте (для FAQ-разметки)</li>
+  <li>Meta title (≤ 60 символов) и meta description (≤ 160)</li>
+  <li>Open Graph и Twitter Card метатеги</li>
+  <li>Alt-текст для всех изображений с целевыми ключами</li>
+  <li>Schema.org разметка (Article, FAQPage, HowTo)</li>
+  <li>Slug в kebab-case с ключевым словом</li>
+</ul>
+
+<p>Промпт для прогона:</p>
+
+<pre><code>Update the blog post at [path] using all items from
+onpage-checklist.md. Maintain the existing voice,
+humor and personality — do not flatten the writing.</code></pre>
+
+<hr>
+
+<h2>7. Technical SEO: sitemap, robots, Lighthouse 100/100</h2>
+
+<p>Три обязательных артефакта:</p>
+
+<ol>
+  <li><strong><code>sitemap.xml</code></strong> — список всех страниц для Google</li>
+  <li><strong><code>robots.txt</code></strong> — что разрешено краулить (закрой только админки)</li>
+  <li><strong>Lighthouse score 100/100</strong> по всем четырём осям: SEO, Accessibility, Best Practices, Performance</li>
+</ol>
+
+<h3>Прогон Lighthouse</h3>
+
+<p>В Chrome: <code>F12</code> → DevTools → таб <em>Lighthouse</em> → <em>Analyze page load</em>. Получаешь четыре score-а и список конкретных проблем (LCP request discovery, render-blocking requests, legacy JavaScript и т.д.).</p>
+
+<p>Копируешь весь отчёт целиком и в Claude:</p>
+
+<pre><code>Here's my Lighthouse report — fix everything to get
+100% on performance, accessibility, best practices and
+SEO. Also generate sitemap.xml and robots.txt.
+
+[paste the full report]</code></pre>
+
+<p>Если первая попытка дала, скажем, 87% — копируй новый отчёт обратно в Claude и итерируешь, пока не будет 100/100.</p>
+
+<hr>
+
+<h2>8. Обернуть всё в Claude Code Skill</h2>
+
+<p>Когда пайплайн отлажен — нет смысла повторять промпты руками. Создаёшь <strong>скилл</strong>, который запускается одной командой <code>/blog</code>.</p>
+
+<p>Промпт на создание скилла:</p>
+
+<pre><code>Create a Claude Code skill called "blog". Steps:
+1. Pick a keyword from keywords.csv that hasn't been used
+2. Build a keyword cluster
+3. Search Google for the keyword, analyze top 3
+4. Generate the post using references/voice|humor|stats|opinions|stories
+5. Pull images from Pexels via .env API key
+6. Apply onpage-checklist.md
+7. Use the existing technically-optimized template
+8. Add to sitemap.xml</code></pre>
+
+<p>После этого новая сессия → команда <code>/blog</code> → готовый пост.</p>
+
+<div class="card warn">
+  <p><strong>Каденция важна.</strong> Не публикуй 1000 постов за день — Google ловит спайки и помечает домен как спам. Реалистичный график:</p>
+  <ul>
+    <li>Дни 1–7: по одному посту в день</li>
+    <li>Неделя 2: по 2 в день</li>
+    <li>Неделя 3+: 3–4 в день максимум</li>
+  </ul>
+</div>
+
+<hr>
+
+<h2>9. Off-page SEO: четыре безопасных способа</h2>
+
+<p>Авторская позиция: <em>off-page — самая опасная часть SEO</em>. Каждый апдейт алгоритма Google в первую очередь убивает тех, кто покупал бэклинки. Но есть четыре легитимных способа.</p>
+
+<h3>① Broken Backlink Swap</h3>
+
+<p>В SEMrush делаешь Site Audit конкурента (например, Homestars). Находишь его внешние битые ссылки (404). Пишешь владельцу страницы, на которой стоит битая: «У вас сломанная ссылка, у меня есть страница на ту же тему — поменяйте».</p>
+
+<h3>② Guest Posting</h3>
+
+<p>В Google ищешь:</p>
+
+<pre><code>"plumbing" + "write for us"</code></pre>
+
+<p>Получаешь сайты, которые принимают гостевые статьи с обратной ссылкой на тебя.</p>
+
+<h3>③ HARO / Hero Journalism</h3>
+
+<p>Журналисты ищут экспертов. Подписываешься на сервисы типа HARO, отвечаешь на вопросы по теме («как прочистить унитаз без вантуза»), получаешь упоминание в статье + бэклинк.</p>
+
+<h3>④ Платные качественные бэклинки</h3>
+
+<p>Есть авторитетные домены с pay-to-play форматом. Платишь $100–$1000, получаешь публикацию с обратной ссылкой. Только реальные домены — не PBN-фермы.</p>
+
+<div class="card warn">
+  <p><strong>Чего НЕ делать:</strong> покупать «100 бэклинков за $5». Это <em>PBN (Private Blog Networks)</em> — фермы из 10 000 мусорных сайтов. Google детектит за месяцы и накладывает санкции, которые лечатся годами или вообще не лечатся. Дешёвый «SEO-эксперт» с Upwork в 90% случаев привезёт тебе именно это.</p>
+</div>
+
+<hr>
+
+<h2>10. Деплой: GitHub → Vercel → Search Console</h2>
+
+<h3>Деплой за 60 секунд</h3>
+
+<ol>
+  <li>Создай приватный репозиторий на GitHub</li>
+  <li>В Claude Code: «push the whole project to this repo: [URL]»</li>
+  <li>Зайди на <a href="https://vercel.com">vercel.com</a>, подключи GitHub-аккаунт</li>
+  <li>Import Project → выбери репо → Framework Preset: Next.js → Deploy</li>
+</ol>
+
+<p>Готово. Можно подключить кастомный домен через Vercel Domains или импортировать с Namecheap.</p>
+
+<h3>Четыре шага после деплоя</h3>
+
+<ol>
+  <li><strong>Google My Business</strong> — самый низко висящий фрукт. Бесплатное listing-окно справа от поиска по «plumber Toronto». Тысячи кликов в месяц при нулевых усилиях</li>
+  <li><strong>Google Search Console</strong> — добавляешь URL prefix, верифицируешь через HTML meta-тег (Claude вставит за секунду), сабмитишь <code>sitemap.xml</code></li>
+  <li><strong>Request Indexing</strong> — в Search Console в строке поиска вбиваешь URL новой страницы → <em>Request Indexing</em>. Вместо ожидания недель страница в индексе через сутки. Лимит ~10 запросов в день</li>
+  <li><strong>Google Analytics</strong> — отслеживание поведения и конверсий, чтобы знать, какой пост приносит лидов</li>
+</ol>
+
+<hr>
+
+<h2>11. Главная мысль про Google</h2>
+
+<p>SEO — чёрный ящик. 200+ сигналов, никто не знает точные веса. Но логика Google проста: <strong>они зарабатывают на рекламе</strong>. Чтобы показывать рекламу — нужны лояльные пользователи. Чтобы пользователи возвращались — нужно показывать им качественный контент.</p>
+
+<div class="card highlight">
+  <p>Из этого вытекает главное правило: <em>сначала контент, потом метрики</em>. Если пост не дочитывают — никакая идеальная on-page оптимизация не вытянет его в топ. Если пост залипает — Google сам понесёт его наверх. Юмор, голос, истории, реальные цифры из бизнеса — это не «приятный бонус», а ключевой ранжирующий сигнал через dwell time, scroll depth, return visits.</p>
+</div>
+
+<hr>
+
+<section class="callout callout-tip">
+  <h3>🔑 Ключевые мысли</h3>
+  <ol>
+    <li><strong>Static Site Generation — не опция</strong>. Без неё Google либо не видит страницу, либо ранжирует ниже. Это первое, что должно быть в CLAUDE.md</li>
+    <li><strong>Не все ключи равны</strong>. Difficulty ≤ 30, volume ≥ 100, informational intent — три фильтра, которые отсеивают 99% мусора</li>
+    <li><strong>Голос важнее структуры</strong>. AI-slop читать невозможно, dwell time в ноль, ранжироваться нечем. Voice/humor/stats files — обязательная часть проекта</li>
+    <li><strong>Кради формулу у топ-3</strong>. SEO — это reverse engineering того, что Google уже отранжировал. Средние метрики топ-3 — это и есть «рабочий ответ»</li>
+    <li><strong>Сервисные страницы конвертят, блог даёт authority</strong>. Без блога сервисные не поднимутся, без сервисных — некуда конвертить трафик</li>
+    <li><strong>Off-page — последняя задача, не первая</strong>. PBN убивают сайты, и большинство «SEO-экспертов» с биржи делают именно их. Лучше потратить время на ещё 50 блог-постов</li>
+  </ol>
+</section>
+
+<section class="callout callout-source">
+  <h3>🔗 Источник</h3>
+  <p>Видео <a href="https://youtu.be/4IyJm1i__ag">«Claude Code SEO: How I Got 50,000 Clicks Per Month»</a> (68 мин) — полный мастер-класс с примерами промптов и демонстрацией пайплайна на сайте сантехнической компании.</p>
+  <p>Инструменты: <a href="https://antigravity.google">Antigravity</a> + Claude Code, <a href="https://semrush.com">SEMrush</a>, <a href="https://www.pexels.com/api/">Pexels API</a>, <a href="https://vercel.com">Vercel</a>, <a href="https://search.google.com/search-console">Google Search Console</a>.</p>
+</section>
+
+</body>
+</html>

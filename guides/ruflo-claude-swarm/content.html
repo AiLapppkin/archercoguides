@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Превратить Claude Code в команду из 100 агентов через Ruflo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&family=Onest:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#0a0a0f; --card:#12121a; --border:#1e1e2e;
+      --text:#e4e4ef; --dim:#8888a0;
+      --gold:#fbbf24; --gold-bright:#fde047; --gold-deep:#d97706;
+      --purple:#7c3aed;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Onest',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding:2rem 1.25rem;max-width:800px;margin:0 auto}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:99;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
+    h1,h2,h3,h4{font-family:'Unbounded',sans-serif;font-weight:700;letter-spacing:-.01em;margin:1.75em 0 .5em;line-height:1.25}
+    h1{font-size:2rem;background:linear-gradient(135deg,var(--gold-bright),var(--gold-deep));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-top:0}
+    h2{font-size:1.4rem}
+    h3{font-size:1.1rem;color:var(--gold-bright)}
+    h4{font-size:.95rem;color:var(--gold)}
+    p{margin:.9em 0;color:var(--dim)}
+    strong{color:var(--text);font-weight:600}
+    em{color:var(--gold-bright);font-style:normal;font-weight:500}
+    ul,ol{margin:1em 0;padding-left:1.5em;color:var(--dim)}
+    li{margin:.4em 0}
+    li::marker{color:var(--gold)}
+    a{color:var(--gold);text-decoration:none;border-bottom:1px dashed rgba(251,191,36,.35)}
+    a:hover{border-bottom-color:var(--gold)}
+    code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:rgba(251,191,36,.08);color:var(--gold-bright);padding:.15em .4em;border-radius:5px;border:1px solid rgba(251,191,36,.15)}
+    pre{background:#0d0d18;border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;overflow-x:auto;margin:1.25rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.75}
+    pre code{background:transparent;border:none;padding:0;font-size:inherit}
+    blockquote{border-left:3px solid var(--gold);background:rgba(251,191,36,.04);padding:1rem 1.25rem;margin:1.25rem 0;border-radius:0 10px 10px 0;color:var(--dim)}
+    .callout{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;margin:1rem 0}
+    .callout-intro,.callout-tip{border-left:3px solid var(--gold)}
+    .callout-source{border-left:3px solid var(--purple)}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;margin:1rem 0}
+    .card.highlight{border-left:3px solid var(--gold)}
+    .card.warn{border-left:3px solid #f59e0b}
+    .tag{display:inline-block;padding:.2rem .6rem;border-radius:6px;font-size:.72rem;font-weight:600;font-family:'Unbounded',sans-serif;background:rgba(251,191,36,.1);color:var(--gold-bright);border:1px solid rgba(251,191,36,.25);margin-right:.25rem}
+    hr{border:none;height:1px;background:var(--border);margin:2.5rem 0}
+    img{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--border);margin:1rem 0}
+  </style>
+</head>
+<body>
+  <h1>Превратить Claude Code в команду из 100 агентов через Ruflo</h1>
+
+  <section class="callout callout-intro">
+    <h3>💡 О чём этот гайд</h3>
+    <p><strong>Ruflo</strong> (бывший Claude Flow, переименован в январе 2026) — это платформа оркестрации поверх Claude Code. Запускает рои из 100+ специализированных агентов, которые координируются через SendMessage, шарят память и учатся. Под капотом — <strong>WASM-ядра на Rust</strong> для policy engine, эмбеддингов и системы доказательств. Одна команда <code>init</code> — и Claude Code получает «нервную систему».</p>
+  </section>
+
+  <section class="callout callout-tip">
+    <h3>✅ Что ты освоишь</h3>
+    <ol>
+      <li>Поймёшь архитектуру Ruflo: Router → Swarm → Agents → Memory с обратной петлёй обучения</li>
+      <li>Установишь Ruflo как плагин Claude Code или MCP-сервер одной командой</li>
+      <li>Подключишь общую память <strong>AgentDB</strong> с HNSW-индексированием</li>
+      <li>Используешь федерацию для безопасного обмена агентами между машинами</li>
+      <li>Запустишь Web UI на <a href="https://flo.ruv.io">flo.ruv.io</a> или Goal Planner на <a href="https://goal.ruv.io">goal.ruv.io</a></li>
+      <li>Соберёшь первый swarm под повторяющуюся задачу в своём бизнесе</li>
+    </ol>
+  </section>
+
+  <hr>
+
+  <h2>1. Понять, чем рой отличается от одного агента</h2>
+
+  <p><strong>Claude Code</strong> — один умный воркер. Умный, но один.</p>
+  <p><strong>Ruflo</strong> — менеджер, который нанимает команду Claude-воркеров, раздаёт каждому задачу и следит, чтобы они обменивались заметками.</p>
+
+  <div class="card highlight">
+    <h4>Состав команды</h4>
+    <p>Внутри 100+ специализированных ролей: <em>coder</em>, <em>tester</em>, <em>reviewer</em>, <em>architect</em>, <em>security</em>, <em>backend-dev</em>, <em>mobile-dev</em>, <em>ml-developer</em>, <em>cicd-engineer</em> и другие. Делятся на <strong>queens</strong> (принимают большие решения) и <strong>workers</strong> (делают чёрную работу). Свои роли пишутся в простом YAML-файле.</p>
+  </div>
+
+  <p>Старая модель: даёшь Claude один большой промпт и молишься. С Ruflo — говоришь, что нужно, а платформа режет задачу на куски. Архитектор планирует. Кодер пишет. Тестер проверяет. Ревьювер чинит. Все шарят одну память и не забывают, что было решено пять минут назад.</p>
+
+  <h2>2. Понять архитектуру Ruflo</h2>
+
+  <p>Самообучающаяся архитектура с обратной петлёй:</p>
+
+  <pre><code>User → Ruflo (CLI/MCP) → Router → Swarm → Agents → Memory → LLM Providers
+                       ^                                |
+                       +────── Learning Loop ←──────────+</code></pre>
+
+  <p>Каждая выполненная задача возвращается в Memory, обогащает паттерны, и следующий заход выполняется быстрее. Под капотом WASM-ядра на Rust обеспечивают изоляцию и скорость для policy engine, эмбеддингов и проверки доказательств.</p>
+
+  <h2>3. Установить Ruflo как плагин Claude Code</h2>
+
+  <p>Это рекомендуемый способ. Добавляет skills, commands, agents и MCP-тулы напрямую в Claude Code:</p>
+
+  <pre><code># Подключи маркетплейс
+/plugin marketplace add ruvnet/ruflo
+
+# Поставь ядро
+/plugin install ruflo-core@ruflo
+
+# Добавь нужные модули
+/plugin install ruflo-swarm@ruflo
+/plugin install ruflo-autopilot@ruflo
+/plugin install ruflo-federation@ruflo</code></pre>
+
+  <p>Этого хватит. Внутри Claude Code появляется AI-команда, и ты продолжаешь работать в привычном интерфейсе. Маленькие <strong>hooks</strong> следят за тем, что ты делаешь, и роутят работу нужному агенту без явных команд.</p>
+
+  <h2>4. Альтернатива: визард или MCP-сервер</h2>
+
+  <p>Если плагин-система не подходит — есть три варианта:</p>
+
+  <pre><code># Через визард (выбираешь роли, память, провайдера)
+npx ruflo@latest init --wizard
+
+# Глобальная установка
+npm install -g ruflo@latest
+
+# Один скрипт-инсталлятор
+curl -fsSL https://cdn.jsdelivr.net/gh/ruvnet/ruflo@main/scripts/install.sh | bash
+
+# Как MCP-сервер
+claude mcp add ruflo -- npx -y @claude-flow/cli@latest</code></pre>
+
+  <div class="card">
+    <h4>314 MCP-инструментов из коробки</h4>
+    <p>В версии <code>3.6.12</code> количество нативных тулов выросло с 87 до <strong>314</strong> — это в 3.5 раза больше. CI-проверки, security-сканы, облачные деплои, observability. Тебе не нужно знать каждый — нужный тул вызовется сам через hooks.</p>
+  </div>
+
+  <h2>5. Подключить общую память AgentDB</h2>
+
+  <p>Память — самая важная часть. Ruflo использует <strong>AgentDB</strong> с HNSW-индексированием — векторное хранилище для AI-агентов. Авторы заявляют, что оно в <em>150–12 500 раз быстрее</em> базового поиска.</p>
+
+  <p>Что это даёт на практике:</p>
+  <ul>
+    <li>Агенты помнят всё <strong>между сессиями</strong></li>
+    <li>Помнят <strong>между проектами</strong></li>
+    <li>Помнят <strong>между машинами</strong></li>
+    <li>Закрыл ноут — вернулся завтра — команда продолжает с того же места</li>
+  </ul>
+
+  <p>Сверху работают <strong>SONA</strong> (нейронные паттерны) и <strong>ReasoningBank</strong> — система анализирует трассы успешных решений и улучшает маршрутизацию задач.</p>
+
+  <h2>6. Использовать федерацию между командами</h2>
+
+  <p><strong>Federation</strong> — главная фича апдейта. Это «Slack для агентов»: агенты на разных машинах, в разных орг-аккаунтах или облачных регионах находят друг друга, проверяют идентичность и обмениваются работой.</p>
+
+  <div class="card highlight">
+    <h4>Как устроена безопасность</h4>
+    <p>Под капотом — <code>mTLS</code> и ключи <code>ED25519</code>. Удалённые агенты стартуют как недоверенные. Идентичность доказывается через challenge-response. Никаких API-ключей или общих секретов.</p>
+    <p>Плюс встроенная PII-pipeline из 14 типов сканирует каждое исходящее сообщение и применяет политики: <code>BLOCK</code>, <code>REDACT</code>, <code>HASH</code> или <code>PASS</code> в зависимости от уровня доверия.</p>
+  </div>
+
+  <p>Доверие считается по формуле <code>0.4×success + 0.2×uptime + 0.2×threat + 0.2×integrity</code>. Апгрейды требуют истории. Даунгрейды — мгновенные. Реальный пример: банк A и банк B обмениваются сигналами о фроде, не передавая данные клиентов. Раньше это были месяцы юридической переписки. Сейчас — две команды.</p>
+
+  <p>Compliance готов из коробки: HIPAA, SOC2, GDPR audit-trails. Каждое событие пишется в журнал и ищется через HNSW.</p>
+
+  <h2>7. Поставить плагины из маркетплейса</h2>
+
+  <p>В Ruflo <strong>32 нативных плагина</strong> для Claude Code и 21 npm-плагин. Ставятся как приложения на телефоне.</p>
+
+  <div class="card">
+    <h4>Главные плагины</h4>
+    <ul>
+      <li><strong>ruflo-core</strong> — основа, health checks, plugin discovery</li>
+      <li><strong>ruflo-swarm</strong> — координация команды агентов</li>
+      <li><strong>ruflo-autopilot</strong> — агенты работают сами в цикле</li>
+      <li><strong>ruflo-loop-workers</strong> — фоновые задачи по таймеру</li>
+      <li><strong>ruflo-federation</strong> — кросс-машинная коллаборация</li>
+      <li><strong>ruflo-agentdb</strong> — векторная база для памяти</li>
+      <li><strong>ruflo-rag-memory</strong> — гибридный поиск, граф-обходы, ранжирование</li>
+      <li><strong>ruflo-aidefence</strong> — блокирует prompt injection, детектит PII</li>
+    </ul>
+  </div>
+
+  <p>С <code>ruflo-loop-workers</code> агент может проверять входящие раз в час, сортировать лиды, готовить черновики ответов — и к утру всё уже на столе.</p>
+
+  <h2>8. Запустить Web UI на flo.ruv.io</h2>
+
+  <p>У Ruflo есть полноценный <strong>Web UI</strong> с MCP tool calling — мульти-модельный чат, в котором тулы ядра вызываются прямо из разговора.</p>
+
+  <div class="card highlight">
+    <h4>Доступные модели по умолчанию</h4>
+    <ul>
+      <li><strong>Qwen 3.6 Max</strong> (default)</li>
+      <li><strong>Claude Sonnet 4.6</strong></li>
+      <li><strong>Claude Haiku 4.5</strong></li>
+      <li><strong>Gemini 2.5 Pro / Flash</strong></li>
+      <li><strong>OpenAI</strong> через OpenRouter</li>
+      <li>Любой OpenAI-совместимый эндпоинт: vLLM, Ollama, LM Studio, Together, Groq</li>
+    </ul>
+  </div>
+
+  <p>~210 тулов в 5 группах (Core, Intelligence, Agents, Memory, DevTools) плюс 18-tool gallery, которая работает прямо в браузере через WASM. Один ответ модели может запустить 4–6 тулов параллельно. Без аккаунта, без API-ключа: открыл <a href="https://flo.ruv.io">flo.ruv.io</a> — попробовал. Свой инстанс деплоится через Docker.</p>
+
+  <h2>9. Описать цели на простом английском через Goal Planner</h2>
+
+  <p><strong>Goal Planner</strong> на <a href="https://goal.ruv.io">goal.ruv.io</a> — это <strong>GOAP A*</strong> планировщик (Goal-Oriented Action Planning). Опиши цель словами — Ruflo разложит её на предусловия, действия и найдёт кратчайший путь через пространство состояний.</p>
+
+  <p>Пример: пишешь «<em>ship the auth refactor with tests and a PR</em>» — Ruflo вытаскивает критерии успеха, ограничения, неявные предусловия. Никакого JSON, никакого DSL.</p>
+
+  <p>Дашборд <a href="https://goal.ruv.io/agents">goal.ruv.io/agents</a> показывает каждого запущенного агента: роль, текущий шаг, namespace памяти, бюджет токенов, статус. Можно убить раннавей-воркера или переназначить задачу.</p>
+
+  <h2>10. Запустить офлайн через Ollama</h2>
+
+  <p>Ruflo работает <strong>офлайн</strong>. Подключаешь локальную модель через Ollama (или плагин <code>ruflo-ruvllm</code>) — и приватные данные не покидают компьютер.</p>
+
+  <p>Для юристов, врачей, бухгалтеров и всех, у кого чувствительная информация, это меняет правила игры. AI-команда есть, приватность сохранена. Поверх — система <strong>SONA</strong>, которая учится на твоих трассах через MicroLoRA-адаптеры.</p>
+
+  <h2>11. Собрать первый swarm под реальную задачу</h2>
+
+  <div class="card highlight">
+    <h4>Маркетинговое агентство</h4>
+    <p>Один агент тянет данные. Второй пишет первый драфт отчёта. Третий проверяет цифры. Четвёртый форматирует финальный документ. Работают параллельно, пока ты занят другим.</p>
+  </div>
+
+  <div class="card highlight">
+    <h4>Риелтор</h4>
+    <p>Swarm следит за новыми листингами, пишет описания объектов, готовит письма для базы покупателей и сохраняет всё в память — следующий заход будет быстрее.</p>
+  </div>
+
+  <div class="card highlight">
+    <h4>Интернет-магазин</h4>
+    <p>Writer-агент, SEO-агент, product-researcher и image-describer. На каждый новый товар swarm пишет описание, подбирает ключевики, готовит социальный пост. Ты только аппрувишь.</p>
+  </div>
+
+  <div class="card highlight">
+    <h4>Коуч</h4>
+    <p>Один агент следит за календарём, второй готовит фоллоу-апы, третий конспектирует звонки из заметок, четвёртый обновляет CRM. Работают, пока ты спишь.</p>
+  </div>
+
+  <h2>12. Понять цифры производительности</h2>
+
+  <p>На бенчмарке <strong>SWE-bench</strong> Ruflo решает <em>84.8%</em> задач — выше многих платных агентских инструментов.</p>
+  <p>API-вызовы режет на <em>~75%</em>: лёгкая работа уходит на дешёвые быстрые модели, тяжёлая — на большую модель. Платишь только за то, что реально требует мозгов.</p>
+  <p>Проект уже не маленький эксперимент: <strong>41 800+ звёзд</strong> на GitHub, ~500 000 загрузок, ~100 000 пользователей в 80+ странах. 6 000+ коммитов, 250 000 строк кода на TypeScript и Rust.</p>
+
+  <h2>13. Учесть подводные камни</h2>
+
+  <div class="card warn">
+    <h4>Что нужно знать заранее</h4>
+    <ol>
+      <li><strong>Терминал.</strong> Простые команды, не код. Если чёрный экран пугает — посмотри 10-минутное видео и норм.</li>
+      <li><strong>Чёткая задача.</strong> Если не знаешь, чего хочешь — рой агентов это не починит. Garbage in, garbage out.</li>
+      <li><strong>Claude Pro / Max.</strong> В апреле 2026 поменялись правила работы сторонних тулов с подпиской. Команда Ruflo держит совместимость, но проверь актуальность.</li>
+      <li><strong>NPM-имя.</strong> Часть команд (например MCP-добавление) до сих пор использует <code>@claude-flow/cli</code> — это исторический пакет, бренд переименован, npm-имя осталось.</li>
+    </ol>
+  </div>
+
+  <h2>14. Запустить план на 30 дней</h2>
+
+  <ol>
+    <li>Не пробовал Claude Code — начни с него. Бесплатно.</li>
+    <li>Подключи Ruflo через <code>/plugin marketplace add ruvnet/ruflo</code></li>
+    <li>Запусти <code>npx ruflo@latest init --wizard</code> с дефолтами</li>
+    <li>Возьми <strong>одну повторяющуюся задачу</strong> в бизнесе: отчёты, письма, фоллоу-апы, контент-драфты</li>
+    <li>Собери под неё маленький swarm</li>
+    <li>Через неделю — добавь следующую задачу</li>
+    <li>За месяц кусок работы переедет на автопилот</li>
+  </ol>
+
+  <hr>
+
+  <section class="callout callout-tip">
+    <h3>🔑 Ключевые мысли</h3>
+    <ul>
+      <li><strong>Claude Code = воркер, Ruflo = менеджер.</strong> Один чат превращается в команду из 100+ агентов с разделением ролей</li>
+      <li><strong>WASM-ядра на Rust</strong> под капотом дают изоляцию и скорость для policy engine, эмбеддингов и системы доказательств</li>
+      <li><strong>Память AgentDB</strong> с HNSW-индексированием хранит контекст между сессиями, проектами и машинами — рой не забывает</li>
+      <li><strong>Federation</strong> позволяет безопасно делиться агентами между офисами через mTLS + ed25519 и 14-типную PII-pipeline</li>
+      <li><strong>32 нативных плагина</strong> и 21 npm-плагин закрывают CI, безопасность, деплой, observability — без ручной настройки</li>
+      <li><strong>Web UI на flo.ruv.io</strong> и <strong>Goal Planner на goal.ruv.io</strong> — пробуешь без установки, мульти-модельный чат и GOAP-планировщик</li>
+      <li>Сдвиг роли: ты больше не воркер, ты — <em>боссом</em>. Сетапишь команду, даёшь цель, получаешь результат</li>
+    </ul>
+  </section>
+
+  <section class="callout callout-source">
+    <h3>🔗 Источник</h3>
+    <p><a href="https://youtu.be/KKwDwndvuJw">Ruflo: New Claude Agent Swarms Update is INSANE!</a> — обзор апдейта Ruflo <code>3.6.12</code>, 12 минут.</p>
+    <p>Репозиторий: <a href="https://github.com/ruvnet/ruflo">github.com/ruvnet/ruflo</a> · Web UI: <a href="https://flo.ruv.io">flo.ruv.io</a> · Goal Planner: <a href="https://goal.ruv.io">goal.ruv.io</a></p>
+    <p>Создатель — <strong>rUv (ruvnet)</strong>. «Ru» — от Ruv. «flo» — от flow state. Любит Rust. Проект стартовал как Claude Flow в мае 2025, в январе 2026 переименован в Ruflo по просьбе Anthropic.</p>
+  </section>
+
+</body>
+</html>

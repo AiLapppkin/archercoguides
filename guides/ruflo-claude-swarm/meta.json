@@ -1,0 +1,14 @@
+{
+  "id": "ruflo-claude-swarm",
+  "slug": "ruflo-claude-swarm",
+  "title": "Превратить Claude Code в команду из 100 агентов через Ruflo",
+  "description": "Ruflo (бывший Claude Flow) поднимает рой Claude-агентов с общей памятью AgentDB, федерацией и 314 MCP-инструментами — одна команда, и в Claude Code работает целая команда.",
+  "category": "claude-code",
+  "tags": ["claude-code", "agents", "ruflo", "swarm", "mcp", "automation"],
+  "youtubeUrl": "https://youtu.be/KKwDwndvuJw?is=b-XRVAipr5LXBJbc",
+  "isPaid": false,
+  "priceStars": 0,
+  "duration": "10 мин чтения",
+  "publishedAt": "2026-05-05",
+  "coverUrl": ""
+}

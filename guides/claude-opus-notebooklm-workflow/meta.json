@@ -1,0 +1,14 @@
+{
+  "id": "claude-opus-notebooklm-workflow",
+  "slug": "claude-opus-notebooklm-workflow",
+  "title": "Использовать Claude Opus 4.7 и NotebookLM как одну машину за 3 шага",
+  "description": "Связка Claude Opus 4.7 и NotebookLM по схеме «думай → пиши промпт → строй»: один AI исследует, второй пишет идеальный промпт, первый собирает рабочий тул за минуты.",
+  "category": "ai-insights",
+  "tags": ["claude", "notebooklm", "workflow", "prompting", "productivity", "ai"],
+  "youtubeUrl": "https://youtu.be/1SXXpcJA2DA?is=HcrRjnSQYjMPN53G",
+  "isPaid": false,
+  "priceStars": 0,
+  "duration": "6 мин чтения",
+  "publishedAt": "2026-05-06",
+  "coverUrl": ""
+}

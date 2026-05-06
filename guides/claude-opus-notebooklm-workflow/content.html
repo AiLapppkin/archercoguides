@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Использовать Claude Opus 4.7 и NotebookLM как одну машину за 3 шага</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&family=Onest:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#0a0a0f; --card:#12121a; --border:#1e1e2e;
+      --text:#e4e4ef; --dim:#8888a0;
+      --gold:#fbbf24; --gold-bright:#fde047; --gold-deep:#d97706;
+      --purple:#7c3aed;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Onest',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding:2rem 1.25rem;max-width:800px;margin:0 auto}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:99;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
+    h1,h2,h3,h4{font-family:'Unbounded',sans-serif;font-weight:700;letter-spacing:-.01em;margin:1.75em 0 .5em;line-height:1.25}
+    h1{font-size:2rem;background:linear-gradient(135deg,var(--gold-bright),var(--gold-deep));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-top:0}
+    h2{font-size:1.4rem}
+    h3{font-size:1.1rem;color:var(--gold-bright)}
+    h4{font-size:.95rem;color:var(--gold)}
+    p{margin:.9em 0;color:var(--dim)}
+    strong{color:var(--text);font-weight:600}
+    em{color:var(--gold-bright);font-style:normal;font-weight:500}
+    ul,ol{margin:1em 0;padding-left:1.5em;color:var(--dim)}
+    li{margin:.4em 0}
+    li::marker{color:var(--gold)}
+    a{color:var(--gold);text-decoration:none;border-bottom:1px dashed rgba(251,191,36,.35)}
+    a:hover{border-bottom-color:var(--gold)}
+    code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:rgba(251,191,36,.08);color:var(--gold-bright);padding:.15em .4em;border-radius:5px;border:1px solid rgba(251,191,36,.15)}
+    pre{background:#0d0d18;border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;overflow-x:auto;margin:1.25rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.75}
+    pre code{background:transparent;border:none;padding:0;font-size:inherit}
+    blockquote{border-left:3px solid var(--gold);background:rgba(251,191,36,.04);padding:1rem 1.25rem;margin:1.25rem 0;border-radius:0 10px 10px 0;color:var(--dim)}
+    .callout{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;margin:1rem 0}
+    .callout-intro,.callout-tip{border-left:3px solid var(--gold)}
+    .callout-source{border-left:3px solid var(--purple)}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;margin:1rem 0}
+    .card.highlight{border-left:3px solid var(--gold)}
+    .card.warn{border-left:3px solid #f59e0b}
+    .tag{display:inline-block;padding:.2rem .6rem;border-radius:6px;font-size:.72rem;font-weight:600;font-family:'Unbounded',sans-serif;background:rgba(251,191,36,.1);color:var(--gold-bright);border:1px solid rgba(251,191,36,.25);margin-right:.25rem}
+    hr{border:none;height:1px;background:var(--border);margin:2.5rem 0}
+    img{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--border);margin:1rem 0}
+  </style>
+</head>
+<body>
+  <h1>Использовать Claude Opus 4.7 и NotebookLM как одну машину за 3 шага</h1>
+
+  <section class="callout callout-intro">
+    <h3>💡 О чём этот гайд</h3>
+    <p>Большинство людей пишут AI один длинный месиво-промпт и удивляются, почему вывод средний. Профи разбивают работу: <strong>один AI думает, второй планирует, первый строит</strong>. Связка <strong>Claude Opus 4.7 + NotebookLM</strong> в правильном порядке даёт рабочий тул за минуты, а не за дни.</p>
+  </section>
+
+  <section class="callout callout-tip">
+    <h3>✅ Что ты освоишь</h3>
+    <ol>
+      <li>Поймёшь, почему один промпт = слабый результат, а трёхшаговый воркфлоу = боевой тул</li>
+      <li>Запустишь Claude Opus 4.7 как ресёрчера, не как билдера</li>
+      <li>Скормишь его вывод NotebookLM как источник и попросишь написать идеальный промпт</li>
+      <li>Вернёшься в Claude с готовым промптом и получишь рабочий тул в один заход</li>
+      <li>Соберёшь свою библиотеку проверенных промптов как актив бизнеса</li>
+    </ol>
+  </section>
+
+  <hr>
+
+  <h2>1. Понять, почему «один промпт» не работает</h2>
+
+  <p>Открыл Claude или ChatGPT, вбил кривой промпт, надеешься на лучшее. Получаешь средний результат. Знакомо?</p>
+
+  <p>Правда в том, что AI <strong>не должен делать всё в одном промпте</strong>. Профи разделяют:</p>
+  <ul>
+    <li>Один AI <strong>думает и исследует</strong></li>
+    <li>Другой AI <strong>превращает исследование в план</strong></li>
+    <li>Первый AI <strong>строит по этому плану</strong></li>
+  </ul>
+
+  <p>Сырое исследование — это не промпт. Исследование <em>говорит, что делать</em>. Промпт <em>говорит AI, как это делать</em>. Между ними — пропасть, и большинство её не видит.</p>
+
+  <h2>2. Распределить роли между двумя инструментами</h2>
+
+  <div class="card highlight">
+    <h4>Claude Opus 4.7 — мозг</h4>
+    <p>Топовая модель Anthropic. Сильнее в рассуждениях, в коде и в следовании длинным инструкциям без потери нити. Описываешь тул — реально собирает рабочую версию, а не наполовину готовую заготовку. Ощущается не как чат, а как разработчик рядом.</p>
+  </div>
+
+  <div class="card highlight">
+    <h4>NotebookLM — организатор</h4>
+    <p>Инструмент Google, движок знаний. Скармливаешь ему информацию — он раскладывает её по полкам. Берёт месиво из мыслей и превращает в чистую структуру. Идеально для ресёрча, контент-плана, SEO, наведения порядка в голове.</p>
+  </div>
+
+  <p>Большая идея: <strong>Claude думает глубоко, NotebookLM строит структуру</strong>. По отдельности — два хороших инструмента. Вместе в правильном порядке — система, которая делает то, на что один тул не способен.</p>
+
+  <h2>3. Шаг 1: запустить Claude как ресёрчера, не как билдера</h2>
+
+  <p>Открой Claude Opus 4.7. Ничего не строй. Сначала <strong>заставь его думать</strong>.</p>
+
+  <p>Пример боевого промпта для ресёрча тула кластеризации ключевых слов:</p>
+
+  <pre><code>Act as an AI research assistant and SEO strategist.
+Research the topic of building a simple keyword cluster tool
+for an AI automation community.
+
+I want a clear breakdown of:
+- how keyword clustering works
+- the key features the tool needs
+- the way clusters should be grouped by search intent
+- five practical use cases for content teams
+- a step-by-step plan to build the tool
+- the common mistakes most people make when clustering keywords
+
+Format it cleanly with headings and bullet points.
+Keep it sharp, no fluff.</code></pre>
+
+  <p>На выходе — структурированный ресёрч. Это как нанять SEO-консультанта, который за две минуты разложил весь проект: фичи, логика, флоу. И этот тул реально нужен любому бизнесу за трафиком — кластеризация ключевиков лежит в основе любой умной SEO-стратегии. Кластеризуешь правильно — пишешь меньше контента, ранжируешься по большему числу запросов.</p>
+
+  <p>Большинство останавливается здесь и пытается строить. Это ошибка. Идём дальше.</p>
+
+  <h2>4. Шаг 2: NotebookLM пишет идеальный промпт</h2>
+
+  <p>Скопируй весь вывод Claude. Открой <a href="https://notebooklm.google.com">NotebookLM</a>. Вставь ресёрч как <strong>источник</strong>. Теперь у NotebookLM полная картина: цель, структура, углы.</p>
+
+  <p>А теперь то, до чего почти никто не додумывается. <strong>Попроси NotebookLM написать промпт за тебя.</strong></p>
+
+  <pre><code>Based on the provided research, generate one high-quality prompt
+to build a simple keyword cluster tool for an AI automation community.
+
+The tool should:
+- let users paste a list of keywords
+- group them into clusters by search intent
+- suggest a primary keyword and a content angle for each cluster
+
+Include clear instructions for Claude to follow.
+Include UI suggestions for a clean, simple interface.
+Make the tool fast and easy to use.
+
+Output only the final prompt, clean and ready to paste.</code></pre>
+
+  <p>NotebookLM выдаёт идеально структурированный промпт — раз в десять лучше того, что ты бы написал сам. Потому что он опирается на ресёрч: знает фичи, знает логику, упаковывает всё в один тугой промпт.</p>
+
+  <div class="card">
+    <h4>Что внутри готового промпта</h4>
+    <ul>
+      <li>Точно описан вход</li>
+      <li>Точно описан выход</li>
+      <li>Точно описано, как должны быть организованы кластеры</li>
+      <li>UI-нотатки для простого интерфейса</li>
+    </ul>
+    <p>Холодным мозгом такой промпт не написать. Половина деталей просто не вспомнится. NotebookLM их не упускает, потому что ресёрч лежит у него прямо перед глазами.</p>
+  </div>
+
+  <p>Это и есть момент, который сносит крышу при первой попытке: <strong>ты используешь один AI, чтобы прокачать второй</strong>. И второй становится сильно умнее.</p>
+
+  <h2>5. Шаг 3: вернуться в Claude и собрать тул</h2>
+
+  <p>Берёшь идеальный промпт из NotebookLM. Вставляешь обратно в Claude Opus 4.7. У Claude — ноль путаницы. Цель есть. Структура есть. Дизайн-нотки есть. Флоу есть. Он строит.</p>
+
+  <div class="card highlight">
+    <h4>Реальный результат на тесте</h4>
+    <p>Тул кластеризации ключевиков для AI-automation сообщества. Один заход, один промпт. Claude выдал:</p>
+    <ul>
+      <li>Поле ввода для вставки ключевиков</li>
+      <li>Логику группировки по search intent</li>
+      <li>Вывод с primary keyword и content angle для каждого кластера</li>
+      <li>Чистый, простой интерфейс</li>
+    </ul>
+    <p>Структурировано, готово вставить в проект.</p>
+  </div>
+
+  <p>Если бы ты просто сказал Claude «собери keyword tool с нуля» одним промптом — получил бы что-то generic, базовое, что пришлось бы переделывать три раза. Через воркфлоу — высококачественная первая версия, которая реально работает.</p>
+
+  <h2>6. Понять, почему это работает для любого бизнеса</h2>
+
+  <p>Ты разделяешь AI на три роли:</p>
+  <ol>
+    <li><strong>Claude</strong> — твой <em>мыслитель</em></li>
+    <li><strong>NotebookLM</strong> — твой <em>стратег</em></li>
+    <li><strong>Claude</strong> — твой <em>билдер</em></li>
+  </ol>
+
+  <p>Каждый инструмент делает то, в чём он лучший. Сложил их в стек — получаешь результат, который ни один тул в одиночку не выдаст.</p>
+
+  <p>Большинство до сих пор пытается всё запихнуть в один промпт. Поэтому выводы слабые. Поэтому фрустрация. Поэтому говорят, что AI переоценён. Дело не в инструментах, а в системе. Когда строишь систему — AI становится другим зверем.</p>
+
+  <h2>7. Применить воркфлоу к своему бизнесу сегодня</h2>
+
+  <p>Возьми <strong>одну вещь</strong>, которую делаешь прямо сейчас. Может, SEO-тул. Может, email-последовательность. Может, контент-воркфлоу.</p>
+
+  <ol>
+    <li><strong>Claude</strong> — ресёрч</li>
+    <li><strong>NotebookLM</strong> — промпт</li>
+    <li><strong>Claude</strong> — билд</li>
+  </ol>
+
+  <p>Прогони сегодня. Сравни с тем, что обычно получаешь. Разница будет в разы.</p>
+
+  <h2>8. Два pro-типа, которые умножают эффект</h2>
+
+  <div class="card highlight">
+    <h4>Тип 1: будь конкретен с аудиторией на шаге 1</h4>
+    <p>Не «build me an SEO tool». А «build me a keyword cluster tool for content teams who write for AI automation founders». Чем больше контекста Claude получит на шаге 1 — тем точнее NotebookLM напишет промпт на шаге 2. Vague inputs → vague outputs. Каждый раз.</p>
+  </div>
+
+  <div class="card highlight">
+    <h4>Тип 2: собирай свайп-файл лучших промптов</h4>
+    <p>Когда NotebookLM даёт промпт, который выдаёт сильный результат в Claude — копируй в отдельный док. Со временем накопится библиотека промптов, которые можно переиспользовать на разных проектах. Это превращает AI в реальный актив бизнеса, а не в чат-тулзу.</p>
+  </div>
+
+  <hr>
+
+  <section class="callout callout-tip">
+    <h3>🔑 Ключевые мысли</h3>
+    <ul>
+      <li><strong>Один промпт = слабый результат.</strong> Профи делят работу на «думай → планируй → строй»</li>
+      <li><strong>Claude Opus 4.7 — мозг</strong> для рассуждений и кода. <strong>NotebookLM — организатор</strong> для структуры</li>
+      <li><strong>Шаг 1.</strong> Заставь Claude исследовать тему, не строить. Получишь структурированный блюпринт</li>
+      <li><strong>Шаг 2.</strong> Скорми ресёрч в NotebookLM как источник и попроси <em>написать промпт</em>. Это move, до которого почти никто не доходит</li>
+      <li><strong>Шаг 3.</strong> Идеальный промпт обратно в Claude — он строит без путаницы</li>
+      <li>Чем конкретнее аудитория на шаге 1 — тем точнее всё дальше</li>
+      <li>Лучшие промпты копи в свайп-файл — он растёт в актив быстрее, чем кажется</li>
+    </ul>
+  </section>
+
+  <section class="callout callout-source">
+    <h3>🔗 Источник</h3>
+    <p><a href="https://youtu.be/1SXXpcJA2DA">Claude Opus 4.7 + NotebookLM is INSANE!</a> — видео-разбор воркфлоу, 7 минут.</p>
+  </section>
+
+</body>
+</html>
